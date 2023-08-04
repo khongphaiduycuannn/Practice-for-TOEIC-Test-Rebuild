@@ -54,6 +54,7 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/view_drawer_nav_header"
         app:itemIconTint="#7086FE"
+        android:background="@drawable/bg_drawer_nav"
         app:itemTextAppearance="@style/menu_text_style"
         app:menu="@menu/drawer_menu" />
 

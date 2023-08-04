@@ -31,7 +31,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_gravity="center"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="20dp"
             app:cardCornerRadius="50dp"
             app:cardElevation="4dp">
 
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="13dp"
+            android:layout_margin="15dp"
             android:orientation="vertical">
 
             <TextView
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:text="Duy Quan"
-                android:textColor="#232323"
+                android:textColor="#2B2FAB"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -67,7 +67,7 @@
                 android:layout_gravity="start"
                 android:singleLine="true"
                 android:text="minhquanminhquan1010@gmail.com"
-                android:textColor="#232323"
+                android:textColor="#2B2FAB"
                 android:textSize="15sp" />
         </LinearLayout>
     </carbon.widget.LinearLayout>
