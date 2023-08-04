@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="30dp"
+    android:background="#D4DDFE"
+    app:layoutDescription="@xml/activity_splash_screen_scene"
+    tools:context=".SplashScreen">
+
+    <LinearLayout
+        android:id="@+id/ground"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_marginTop="-110dp"
+        android:background="#EDF0FF"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_launcher" />
+
+    <ImageView
+        android:id="@+id/img_launcher_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="115dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/txt_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-14dp"
+        android:text="Test Pro"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.60"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_launcher_icon" />
+
+    <ImageView
+        android:id="@+id/img_app_name"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="-7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_app_name"
+        app:layout_constraintEnd_toStartOf="@+id/txt_app_name"
+        app:layout_constraintTop_toTopOf="@+id/txt_app_name"
+        app:srcCompat="@drawable/img_text_toeic" />
+
+    <ImageView
+        android:id="@+id/img_launcher"
+        android:layout_width="420dp"
+        android:layout_height="420dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="60dp"
+        android:scaleX="0.9"
+        android:scaleY="0.9"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_launcher_icon"
+        app:srcCompat="@drawable/img_launcher" />
+</androidx.constraintlayout.motion.widget.MotionLayout>
