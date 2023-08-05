@@ -16,5 +16,20 @@ class MyApplication : Application() {
         fun getAppContext(): Context? {
             return context
         }
+
+        fun getToken(): String? {
+            val setting = getAppContext()?.getSharedPreferences("app_status", 0)
+            return setting?.getString("access_token", null)
+        }
+
+        fun setToken(token: String?) {
+            val setting = getAppContext()?.getSharedPreferences("app_status", 0)
+            setting?.edit()?.putString("access_token", "Bearer $token")?.apply()
+        }
+
+        fun clearToken() {
+            val setting = getAppContext()?.getSharedPreferences("app_status", 0)
+            setting?.edit()?.putString("access_token", null)?.apply()
+        }
     }
 }

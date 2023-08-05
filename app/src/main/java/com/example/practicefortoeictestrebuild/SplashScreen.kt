@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import com.example.practicefortoeictestrebuild.base.BaseActivity
 import com.example.practicefortoeictestrebuild.databinding.ActivitySplashScreenBinding
+import com.example.practicefortoeictestrebuild.ui.main.MainActivity
 
 class SplashScreen :
     BaseActivity<ActivitySplashScreenBinding>(ActivitySplashScreenBinding::inflate) {
