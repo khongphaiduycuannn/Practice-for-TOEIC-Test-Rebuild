@@ -20,7 +20,7 @@ fun Dialog.startLoading(stopFlag: Boolean = false) {
         attributes.apply {
             gravity = Gravity.CENTER
         }
-        setDimAmount(0.5F)
+        setDimAmount(0.25F)
     }
     setCancelable(stopFlag)
     show()

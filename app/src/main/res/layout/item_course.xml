@@ -74,11 +74,11 @@
     <LinearLayout
         android:id="@+id/ln_body"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/card_information"
+            android:id="@+id/list_lesson"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -86,7 +86,7 @@
             tools:listitem="@layout/item_lesson" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/practice_test"
+            android:id="@+id/list_topic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
