@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_second"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:rotation="-8">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_front_side"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_flashcard"
+        android:elevation="3dp">
+
+        <ImageView
+            android:id="@+id/img_image"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.35" />
+
+        <TextView
+            android:id="@+id/txt_front"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#232323"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/txt_ipa"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_image"
+            tools:text="computer science" />
+
+        <TextView
+            android:id="@+id/txt_ipa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#232323"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/txt_front"
+            tools:text="/kəmˈpjuːtə(r)/" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_back_side"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:alpha="0"
+        android:background="@drawable/bg_flashcard"
+        android:elevation="3dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/txt_back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:gravity="start"
+                android:paddingHorizontal="20dp"
+                android:textColor="#232323"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                tools:text="Khoa học máy tính" />
+
+            <TextView
+                android:id="@+id/txt_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:paddingHorizontal="25dp"
+                android:textColor="#232323"
+                android:textSize="20sp"
+                tools:text="She is going to earn a degree in computer science because it's necessary in her future job." />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
