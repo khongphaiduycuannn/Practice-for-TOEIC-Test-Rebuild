@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="60dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="Press and Practice Your Category Again Below"
+        android:textColor="#232323"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="10dp"
+        android:layout_weight="1"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:id="@+id/ln_all"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_circle_white"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ln_new"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5">
+
+            <LinearLayout
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/shape_circle_grey"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txt_count_all"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:background="@drawable/shape_circle_white"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="#849BB6"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="All"
+            android:textColor="#849CB6"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/ln_all"
+            app:layout_constraintStart_toStartOf="@+id/ln_all"
+            app:layout_constraintTop_toBottomOf="@+id/ln_all" />
+
+        <LinearLayout
+            android:id="@+id/ln_new"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_circle_white"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ln_incorrect"
+            app:layout_constraintStart_toEndOf="@+id/ln_all"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5">
+
+            <LinearLayout
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/shape_circle_orange"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txt_count_new"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:background="@drawable/shape_circle_white"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="#FECA47"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="New"
+            android:textColor="#FFCB40"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/ln_new"
+            app:layout_constraintStart_toStartOf="@+id/ln_new"
+            app:layout_constraintTop_toBottomOf="@+id/ln_new" />
+
+        <LinearLayout
+            android:id="@+id/ln_incorrect"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_circle_white"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ln_correct"
+            app:layout_constraintStart_toEndOf="@+id/ln_new"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5">
+
+            <LinearLayout
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/shape_circle_red"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txt_count_incorrect"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:background="@drawable/shape_circle_white"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="#FF958F"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="Incorrect"
+            android:textColor="#FF938D"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/ln_incorrect"
+            app:layout_constraintStart_toStartOf="@+id/ln_incorrect"
+            app:layout_constraintTop_toBottomOf="@+id/ln_incorrect" />
+
+        <LinearLayout
+            android:id="@+id/ln_correct"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_circle_white"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ln_marked"
+            app:layout_constraintStart_toEndOf="@+id/ln_incorrect"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5">
+
+            <LinearLayout
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/shape_circle_green"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txt_count_correct"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:background="@drawable/shape_circle_white"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="#85BC24"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="Correct"
+            android:textColor="#83BC24"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/ln_correct"
+            app:layout_constraintStart_toStartOf="@+id/ln_correct"
+            app:layout_constraintTop_toBottomOf="@+id/ln_correct" />
+
+
+        <LinearLayout
+            android:id="@+id/ln_marked"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_circle_white"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ln_correct"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5">
+
+            <LinearLayout
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/shape_circle_blue"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/txt_count_marked"
+                    android:layout_width="41dp"
+                    android:layout_height="41dp"
+                    android:background="@drawable/shape_circle_white"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="#27C9EE"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="Marked"
+            android:textColor="#22C9ED"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/ln_marked"
+            app:layout_constraintStart_toStartOf="@+id/ln_marked"
+            app:layout_constraintTop_toBottomOf="@+id/ln_marked" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginHorizontal="5dp"
+            android:background="@drawable/shape_line_black"
+            app:layout_constraintBottom_toBottomOf="@+id/ln_incorrect"
+            app:layout_constraintTop_toTopOf="@+id/ln_incorrect"
+            tools:layout_editor_absoluteX="5dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_next_practice"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_button_next_practice"
+        android:text="Next practice"
+        android:textColor="#EFEFEF"
+        android:textStyle="bold" />
+</LinearLayout>
