@@ -28,7 +28,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         ViewModelProvider(this)[HomeViewModel::class.java]
     }
 
-    private val dialog by lazy { Dialog(this) }
+    private val loadingDialog by lazy { Dialog(this) }
+
+    private val internetDialog by lazy { Dialog(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +42,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         MyApplication.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGJkYmQ1NmI3OWVkOGRkNDNiMWQ5NDYiLCJpYXQiOjE2OTEyMzEzNTAsImV4cCI6MTY5MTgzNjE1MH0.3Q_aeLnbteLVd0cjnvmGaMC_6p5l5xvuFckP46EI0jo")
         if (MyApplication.getToken().isNullOrEmpty()) {
             logout()
-        } else viewModel.getData(dialog)
+        } else viewModel.getData(internetDialog)
     }
 
     override fun handleEvent() {
@@ -50,9 +52,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     override fun bindData() {
         viewModel.isLoading.observe(this) {
             if (it) {
-                dialog.startLoading(false)
+                loadingDialog.startLoading(false)
             } else {
-                dialog.dismiss()
+                loadingDialog.dismiss()
             }
         }
 

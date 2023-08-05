@@ -34,6 +34,7 @@ fun Dialog.startInternetError(stopFlag: Boolean = false) {
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.WRAP_CONTENT
         )
+
         setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         attributes.apply {
             gravity = Gravity.CENTER
