@@ -12,17 +12,29 @@
         tools:layout="@layout/fragment_course" >
         <action
             android:id="@+id/action_courseFragment_to_lessonFragment"
-            app:destination="@id/lessonFragment" />
+            app:destination="@id/lessonFragment"
+            app:enterAnim="@anim/transition_zoom_in"
+            app:exitAnim="@anim/transition_zoom_out"
+            app:popEnterAnim="@anim/transition_zoom_in"
+            app:popExitAnim="@anim/transition_zoom_out" />
         <action
             android:id="@+id/action_courseFragment_to_testStartFragment"
-            app:destination="@id/testStartFragment" />
+            app:destination="@id/testStartFragment"
+            app:enterAnim="@anim/transition_zoom_in"
+            app:exitAnim="@anim/transition_zoom_out"
+            app:popEnterAnim="@anim/transition_zoom_in"
+            app:popExitAnim="@anim/transition_zoom_out" />
         <action
             android:id="@+id/action_courseFragment_to_flashcardStartFragment"
-            app:destination="@id/flashcardStartFragment" />
+            app:destination="@id/flashcardStartFragment"
+            app:enterAnim="@anim/transition_zoom_in"
+            app:exitAnim="@anim/transition_zoom_out"
+            app:popEnterAnim="@anim/transition_zoom_in"
+            app:popExitAnim="@anim/transition_zoom_out" />
     </fragment>
     <fragment
         android:id="@+id/lessonFragment"
-        android:name="com.example.practicefortoeictestrebuild.ui.document.LessonFragment"
+        android:name="com.example.practicefortoeictestrebuild.ui.lesson.LessonFragment"
         android:label="fragment_lesson"
         tools:layout="@layout/fragment_lesson" />
     <fragment
@@ -32,7 +44,11 @@
         tools:layout="@layout/fragment_test_start" >
         <action
             android:id="@+id/action_testStartFragment_to_testFragment"
-            app:destination="@id/testFragment" />
+            app:destination="@id/testFragment"
+            app:enterAnim="@anim/transition_zoom_in"
+            app:exitAnim="@anim/transition_zoom_out"
+            app:popEnterAnim="@anim/transition_zoom_in"
+            app:popExitAnim="@anim/transition_zoom_out" />
     </fragment>
     <fragment
         android:id="@+id/testFragment"
@@ -41,7 +57,11 @@
         tools:layout="@layout/fragment_test" >
         <action
             android:id="@+id/action_testFragment_to_testResultFragment"
-            app:destination="@id/testResultFragment" />
+            app:destination="@id/testResultFragment"
+            app:enterAnim="@anim/transition_zoom_in"
+            app:exitAnim="@anim/transition_zoom_out"
+            app:popEnterAnim="@anim/transition_zoom_in"
+            app:popExitAnim="@anim/transition_zoom_out" />
     </fragment>
     <fragment
         android:id="@+id/testResultFragment"
@@ -55,7 +75,11 @@
         tools:layout="@layout/fragment_flashcard_start" >
         <action
             android:id="@+id/action_flashcardStartFragment_to_flashcardLearnFragment"
-            app:destination="@id/flashcardLearnFragment" />
+            app:destination="@id/flashcardLearnFragment"
+            app:enterAnim="@anim/transition_zoom_in"
+            app:exitAnim="@anim/transition_zoom_out"
+            app:popEnterAnim="@anim/transition_zoom_in"
+            app:popExitAnim="@anim/transition_zoom_out" />
     </fragment>
     <fragment
         android:id="@+id/flashcardLearnFragment"
