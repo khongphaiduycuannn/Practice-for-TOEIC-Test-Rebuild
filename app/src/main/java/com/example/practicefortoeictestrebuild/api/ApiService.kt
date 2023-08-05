@@ -1,8 +1,6 @@
 package com.example.practicefortoeictestrebuild.api
 
-import com.example.practicefortoeictestrebuild.model.Course
-import com.example.practicefortoeictestrebuild.model.Lesson
-import com.example.practicefortoeictestrebuild.model.User
+import com.example.practicefortoeictestrebuild.model.*
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -26,4 +24,16 @@ interface ApiService {
         @Header("Authorization") authorization: String?,
         @Path("lessonId") lessonId: String?
     ): Call<ApiResponse<Lesson>>
+
+    @GET("/api/v1/topics/{topicId}")
+    fun getTopic(
+        @Header("Authorization") authorization: String?,
+        @Path("topicId") topicId: String?
+    ): Call<ApiResponse<Topic>>
+
+    @GET("/api/v1/progress/cards/study")
+    fun getProgressCard(
+        @Header("Authorization") authorization: String?,
+        @Query("topicId") topicId: String?
+    ): Call<ApiResponse<MutableList<DataOverview>>>
 }
