@@ -9,5 +9,57 @@
         android:id="@+id/courseFragment"
         android:name="com.example.practicefortoeictestrebuild.ui.course.CourseFragment"
         android:label="fragment_course"
-        tools:layout="@layout/fragment_course" />
+        tools:layout="@layout/fragment_course" >
+        <action
+            android:id="@+id/action_courseFragment_to_lessonFragment"
+            app:destination="@id/lessonFragment" />
+        <action
+            android:id="@+id/action_courseFragment_to_testStartFragment"
+            app:destination="@id/testStartFragment" />
+        <action
+            android:id="@+id/action_courseFragment_to_flashcardStartFragment"
+            app:destination="@id/flashcardStartFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/lessonFragment"
+        android:name="com.example.practicefortoeictestrebuild.ui.document.LessonFragment"
+        android:label="fragment_lesson"
+        tools:layout="@layout/fragment_lesson" />
+    <fragment
+        android:id="@+id/testStartFragment"
+        android:name="com.example.practicefortoeictestrebuild.ui.test.TestStartFragment"
+        android:label="fragment_test_start"
+        tools:layout="@layout/fragment_test_start" >
+        <action
+            android:id="@+id/action_testStartFragment_to_testFragment"
+            app:destination="@id/testFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="com.example.practicefortoeictestrebuild.ui.test.TestFragment"
+        android:label="fragment_test"
+        tools:layout="@layout/fragment_test" >
+        <action
+            android:id="@+id/action_testFragment_to_testResultFragment"
+            app:destination="@id/testResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/testResultFragment"
+        android:name="com.example.practicefortoeictestrebuild.ui.test.TestResultFragment"
+        android:label="fragment_test_result"
+        tools:layout="@layout/fragment_test_result" />
+    <fragment
+        android:id="@+id/flashcardStartFragment"
+        android:name="com.example.practicefortoeictestrebuild.ui.vocabulary.FlashcardStartFragment"
+        android:label="fragment_flashcard_start"
+        tools:layout="@layout/fragment_flashcard_start" >
+        <action
+            android:id="@+id/action_flashcardStartFragment_to_flashcardLearnFragment"
+            app:destination="@id/flashcardLearnFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/flashcardLearnFragment"
+        android:name="com.example.practicefortoeictestrebuild.ui.vocabulary.FlashcardLearnFragment"
+        android:label="fragment_flashcard_learn"
+        tools:layout="@layout/fragment_flashcard_learn" />
 </navigation>
