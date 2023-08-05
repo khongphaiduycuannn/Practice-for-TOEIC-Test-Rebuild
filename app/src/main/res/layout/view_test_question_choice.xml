@@ -1,0 +1,117 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/a_answer"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:background="@drawable/ic_choice_unchecked"
+                android:orientation="horizontal" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_a_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="(A)"
+            android:textColor="#232323"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/b_answer"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:background="@drawable/ic_choice_unchecked"
+                android:orientation="horizontal" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_b_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="(B)"
+            android:textColor="#232323"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/c_answer"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:background="@drawable/ic_choice_unchecked"
+                android:orientation="horizontal" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_c_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="(C)"
+            android:textColor="#232323"
+            android:textSize="17sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/d_answer"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:background="@drawable/ic_choice_unchecked"
+                android:orientation="horizontal" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_d_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="(D)"
+            android:textColor="#232323"
+            android:textSize="17sp" />
+    </LinearLayout>
+</LinearLayout>
