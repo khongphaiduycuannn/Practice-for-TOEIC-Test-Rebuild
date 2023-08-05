@@ -2,8 +2,12 @@ package com.example.practicefortoeictestrebuild.ui.main
 
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Gravity
 import android.view.Menu
+import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -14,6 +18,7 @@ import com.example.practicefortoeictestrebuild.MyApplication
 import com.example.practicefortoeictestrebuild.R
 import com.example.practicefortoeictestrebuild.base.BaseActivity
 import com.example.practicefortoeictestrebuild.databinding.ActivityMainBinding
+import com.example.practicefortoeictestrebuild.databinding.DialogInternetErrorBinding
 import com.example.practicefortoeictestrebuild.databinding.ViewDrawerNavHeaderBinding
 import com.example.practicefortoeictestrebuild.model.User
 import com.example.practicefortoeictestrebuild.ui.login.LoginActivity
@@ -32,6 +37,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     private val internetDialog by lazy { Dialog(this) }
 
+    private val dialogBinding by lazy { DialogInternetErrorBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setBottomNavigationWithNavController(savedInstanceState)
@@ -39,6 +46,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     override fun initData() {
+        internetDialog.setContentView(dialogBinding.root)
+        internetDialog.setCancelable(false)
+        internetDialog.window?.apply {
+            setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
+            attributes.apply {
+                gravity = Gravity.CENTER
+            }
+            setDimAmount(0.5F)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
         MyApplication.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGJkYmQ1NmI3OWVkOGRkNDNiMWQ5NDYiLCJpYXQiOjE2OTEyMzEzNTAsImV4cCI6MTY5MTgzNjE1MH0.3Q_aeLnbteLVd0cjnvmGaMC_6p5l5xvuFckP46EI0jo")
         if (MyApplication.getToken().isNullOrEmpty()) {
             logout()
@@ -46,7 +67,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     override fun handleEvent() {
-
+        dialogBinding.btnRetry.setOnClickListener {
+            internetDialog.dismiss()
+            if (MyApplication.getToken().isNullOrEmpty()) {
+                logout()
+            } else viewModel.getData(internetDialog)
+        }
     }
 
     override fun bindData() {

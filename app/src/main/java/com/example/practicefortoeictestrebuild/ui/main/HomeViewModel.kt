@@ -56,7 +56,7 @@ class HomeViewModel : BaseViewModel() {
                 _user.value = it
             },
             onError = {
-                dialog.startInternetError()
+                dialog.show()
             }
         )
     }
