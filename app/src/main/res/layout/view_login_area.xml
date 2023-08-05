@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login_page"
+    app:layoutDescription="@xml/view_login_area_scene">
+
+    <ImageView
+        android:id="@+id/img_launcher_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="90dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_launcher" />
+
+    <ImageView
+        android:id="@+id/img_app_name"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="-7dp"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_app_name"
+        app:layout_constraintEnd_toStartOf="@+id/txt_app_name"
+        app:layout_constraintTop_toTopOf="@+id/txt_app_name"
+        app:srcCompat="@drawable/img_text_toeic" />
+
+    <TextView
+        android:id="@+id/txt_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-14dp"
+        android:text="Test Pro"
+        android:textColor="#232323"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.60"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_launcher_icon" />
+
+    <LinearLayout
+        android:id="@+id/ln_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="62dp"
+        android:layout_marginEnd="62dp"
+        android:background="@drawable/bg_login_edit_text"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4">
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_margin="3dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_user" />
+
+        <EditText
+            android:id="@+id/edt_username"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:hint="Username"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="5dp"
+            android:singleLine="true"
+            android:text="ndmquan1010@gmail.com"
+            android:textColorHint="#798288"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ln_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="62dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="62dp"
+        android:background="@drawable/bg_login_edit_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ln_username">
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_margin="3dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_password" />
+
+        <EditText
+            android:id="@+id/edt_password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="5dp"
+            android:singleLine="true"
+            android:text="quanduy1010"
+            android:textColorHint="#798288"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/error_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="* error message"
+        android:textColor="#FBFCFF"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/ln_password"
+        app:layout_constraintTop_toBottomOf="@+id/ln_password" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_login"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/bg_btn_sign_in"
+        android:text="Login"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/error_message" />
+
+    <LinearLayout
+        android:id="@+id/ln_or"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="100dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_login">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/shape_line_grey" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:text="OR"
+            android:textColor="#898989"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/shape_line_grey" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ln_sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ln_or">
+
+        <TextView
+            android:id="@+id/txt_sign_up_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Do you have any account?"
+            android:textColor="#232323"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btn_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="Sign up"
+            android:textColor="#32B0E6"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/txt_sign_up_content"
+            tools:layout_editor_absoluteY="0dp" />
+    </LinearLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
