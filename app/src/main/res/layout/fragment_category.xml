@@ -16,7 +16,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/view_home_header" />
+        <include
+            android:id="@+id/view_home_header"
+            layout="@layout/view_home_header" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
