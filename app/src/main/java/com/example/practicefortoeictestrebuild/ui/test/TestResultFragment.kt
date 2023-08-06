@@ -49,6 +49,11 @@ class TestResultFragment :
             binding.testResultBar.txtCountIncorrect.text = "${it.size}"
             binding.testResultBar.txtCountNew.text =
                 "${countAllQuestion - countCorrectQuestion - countWrongQuestion}"
+
+            if (countAllQuestion > 0) {
+                val progress: Int = (100.0 * countCorrectQuestion / countAllQuestion).toInt()
+                binding.testDetailCard.txtProgress.text = "$progress"
+            }
         }
     }
 }

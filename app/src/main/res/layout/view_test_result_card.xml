@@ -188,6 +188,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/txt_progress"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:background="@drawable/bg_test_progress_card_header_3"
