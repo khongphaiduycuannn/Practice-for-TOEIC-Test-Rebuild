@@ -18,8 +18,12 @@ import kotlin.coroutines.suspendCoroutine
 
 class TestViewModel : BaseViewModel() {
 
-    private val _topicId = MutableLiveData<String>().apply {
+    private val _topicName = MutableLiveData<String>().apply {
         value = ""
+    }
+
+    private val _topicIds = MutableLiveData<MutableList<String>>().apply {
+        value = mutableListOf()
     }
 
     private val _allQuestion = MutableLiveData<MutableList<String>>().apply {
@@ -34,7 +38,9 @@ class TestViewModel : BaseViewModel() {
         value = mutableListOf()
     }
 
-    val topicId: LiveData<String> get() = _topicId
+    val topicName: LiveData<String> get() = _topicName
+
+    val topicIds: LiveData<MutableList<String>> get() = _topicIds
 
     val allQuestion: LiveData<MutableList<String>> get() = _allQuestion
 
@@ -42,8 +48,10 @@ class TestViewModel : BaseViewModel() {
 
     val wrongQuestion: LiveData<MutableList<String>> get() = _wrongQuestion
 
-    fun setTopicId(id: String?) {
-        _topicId.value = id
+    val index = MutableLiveData<Int>().apply { value = 0 }
+
+    fun setTopicId(list: MutableList<String>?) {
+        _topicIds.value = list
     }
 
     private suspend fun getQuestion(): DataResult<Boolean> {
@@ -54,7 +62,8 @@ class TestViewModel : BaseViewModel() {
         val wrongQuestion = mutableListOf<String>()
 
         val x = suspendCoroutine { continuation ->
-            apiService.getProgressCard(MyApplication.getToken(), _topicId.value)
+            apiService.getProgressCard(MyApplication.getToken(),
+                index.value?.let { _topicIds.value?.get(it) })
                 .enqueue(object : Callback<ApiResponse<MutableList<DataOverview>>> {
                     override fun onResponse(
                         call: Call<ApiResponse<MutableList<DataOverview>>>,
@@ -80,13 +89,16 @@ class TestViewModel : BaseViewModel() {
         }
 
         val y = suspendCoroutine { continuation ->
-            apiService.getTopic(MyApplication.getToken(), _topicId.value)
+            apiService.getTopic(
+                MyApplication.getToken(),
+                index.value?.let { _topicIds.value?.get(it) })
                 .enqueue(object : Callback<ApiResponse<Topic>> {
                     override fun onResponse(
                         call: Call<ApiResponse<Topic>>,
                         response: Response<ApiResponse<Topic>>
                     ) {
                         if (response.isSuccessful && response.body()?.data != null) {
+                            _topicName.value = response.body()?.data!!.name
                             response.body()?.data!!.cards.forEach {
                                 allQuestion.add(it.id)
                             }

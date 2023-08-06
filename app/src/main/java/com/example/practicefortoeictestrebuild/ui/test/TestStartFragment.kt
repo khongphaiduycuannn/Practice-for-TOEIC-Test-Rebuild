@@ -2,6 +2,7 @@ package com.example.practicefortoeictestrebuild.ui.test
 
 import android.app.Dialog
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.practicefortoeictestrebuild.base.BaseFragment
 import com.example.practicefortoeictestrebuild.databinding.FragmentTestStartBinding
 import com.example.practicefortoeictestrebuild.utils.startLoading
@@ -28,7 +29,13 @@ class TestStartFragment :
     }
 
     override fun handleEvent() {
-
+        binding.testResultBar.btnNextPractice.setOnClickListener {
+            viewModel?.index?.value = viewModel?.index?.value!! + 1
+            if (viewModel?.index?.value!! < viewModel?.topicIds?.value!!.size) {
+                viewModel?.getData()
+            }
+            else findNavController().popBackStack()
+        }
     }
 
     override fun bindData() {
@@ -60,6 +67,10 @@ class TestStartFragment :
                 val progress: Int = (100.0 * countCorrectQuestion / countAllQuestion).toInt()
                 binding.testProgressCard.txtProgress.text = "$progress%"
             }
+        }
+
+        viewModel?.topicName?.observe(viewLifecycleOwner) {
+            binding.toolbar.title = it
         }
     }
 }

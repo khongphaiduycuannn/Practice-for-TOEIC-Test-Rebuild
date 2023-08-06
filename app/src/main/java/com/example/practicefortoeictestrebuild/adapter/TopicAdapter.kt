@@ -53,10 +53,16 @@ class TopicAdapter(
             binding.lnTopic.setOnClickListener {
                 if (courseViewModel?.group?.value == "vocabulary") {
                     vocabularyViewModel?.setTopicId(listTopic[position].id)
+
                     fragment.findNavController()
                         .navigate(R.id.action_courseFragment_to_flashcardStartFragment)
                 } else if (!courseViewModel?.group?.value.isNullOrEmpty()) {
-                    testViewModel?.setTopicId(listTopic[position].id)
+                    val list = mutableListOf<String>()
+                    listTopic.forEach { list.add(it.id) }
+
+                    testViewModel?.index?.value = position
+                    testViewModel?.setTopicId(list)
+
                     fragment.findNavController()
                         .navigate(R.id.action_courseFragment_to_testStartFragment)
                 }

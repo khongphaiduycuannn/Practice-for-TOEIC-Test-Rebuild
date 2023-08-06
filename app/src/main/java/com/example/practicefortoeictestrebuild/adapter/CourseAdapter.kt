@@ -47,7 +47,8 @@ class CourseAdapter(
                     binding.lnBody.layoutParams = getParam(LayoutParams.MATCH_PARENT, 0)
                 } else {
                     binding.imgStatus.setImageResource(R.drawable.ic_collap)
-                    binding.lnBody.layoutParams = getParam(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+                    binding.lnBody.layoutParams =
+                        getParam(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
                 }
 
                 isCollapsed[position] = !isCollapsed[position]
