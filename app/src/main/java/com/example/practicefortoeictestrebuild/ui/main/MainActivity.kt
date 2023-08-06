@@ -60,7 +60,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
 
-        MyApplication.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGJkYmQ1NmI3OWVkOGRkNDNiMWQ5NDYiLCJpYXQiOjE2OTEyMzEzNTAsImV4cCI6MTY5MTgzNjE1MH0.3Q_aeLnbteLVd0cjnvmGaMC_6p5l5xvuFckP46EI0jo")
         if (MyApplication.getToken().isNullOrEmpty()) {
             logout()
         } else viewModel.getData(internetDialog)
@@ -148,7 +147,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         binding.drawerView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_logout -> {
-
+                    logout()
                 }
             }
             true

@@ -2,10 +2,7 @@ package com.example.practicefortoeictestrebuild.api
 
 import com.example.practicefortoeictestrebuild.model.*
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiService {
     @GET("/api/v1/auth/me")
@@ -36,4 +33,14 @@ interface ApiService {
         @Header("Authorization") authorization: String?,
         @Query("topicId") topicId: String?
     ): Call<ApiResponse<MutableList<DataOverview>>>
+
+    @POST("/api/v1/auth/login")
+    fun login(
+        @Body body: Map<String, String>
+    ): Call<ApiResponse<Any>>
+
+    @POST("/api/v1/auth/register")
+    fun register(
+        @Body body: Map<String, String>
+    ): Call<ApiResponse<Any>>
 }
