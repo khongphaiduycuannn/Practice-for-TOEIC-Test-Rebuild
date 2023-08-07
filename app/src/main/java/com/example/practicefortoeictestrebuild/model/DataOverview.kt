@@ -8,5 +8,7 @@ data class DataOverview(
     @SerializedName("name")
     val name: String,
     @SerializedName("status")
-    val status: Int
+    val status: Int,
+    @SerializedName("cardId")
+    val cardId: String
 )

@@ -72,8 +72,8 @@ class TestViewModel : BaseViewModel() {
                         if (response.isSuccessful && response.body()?.data != null) {
                             val list = response.body()?.data
                             list?.forEach {
-                                if (it.status == 1) wrongQuestion.add(it.id)
-                                else correctQuestion.add(it.id)
+                                if (it.status == 1) wrongQuestion.add(it.cardId)
+                                else correctQuestion.add(it.cardId)
                             }
                             continuation.resume(1)
                         } else continuation.resume(0)
@@ -129,5 +129,23 @@ class TestViewModel : BaseViewModel() {
             onError = {
 
             })
+    }
+
+    fun removeCorrectCard(id: String) {
+        _correctQuestion.value?.remove(id)
+        if (_wrongQuestion.value?.contains(id) == false) {
+            _wrongQuestion.value?.add(id)
+        }
+    }
+
+    fun removeWrongCard(id: String) {
+        _wrongQuestion.value?.remove(id)
+        if (_correctQuestion.value?.contains(id) == false) {
+            _correctQuestion.value?.add(id)
+        }
+    }
+
+    fun indexPlusOne() {
+        index.value = index.value!! + 1
     }
 }

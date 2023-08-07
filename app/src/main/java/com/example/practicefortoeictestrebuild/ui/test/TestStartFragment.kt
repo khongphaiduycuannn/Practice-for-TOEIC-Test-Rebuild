@@ -3,6 +3,7 @@ package com.example.practicefortoeictestrebuild.ui.test
 import android.app.Dialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.practicefortoeictestrebuild.R
 import com.example.practicefortoeictestrebuild.base.BaseFragment
 import com.example.practicefortoeictestrebuild.databinding.FragmentTestStartBinding
 import com.example.practicefortoeictestrebuild.utils.startLoading
@@ -13,6 +14,12 @@ class TestStartFragment :
     private val viewModel by lazy {
         activity?.let {
             ViewModelProvider(it)[TestViewModel::class.java]
+        }
+    }
+
+    private val testResultViewModel by lazy {
+        activity?.let {
+            ViewModelProvider(it)[TestResultViewModel::class.java]
         }
     }
 
@@ -30,11 +37,23 @@ class TestStartFragment :
 
     override fun handleEvent() {
         binding.testResultBar.btnNextPractice.setOnClickListener {
-            viewModel?.index?.value = viewModel?.index?.value!! + 1
-            if (viewModel?.index?.value!! < viewModel?.topicIds?.value!!.size) {
-                viewModel?.getData()
+            viewModel?.indexPlusOne()
+        }
+
+        binding.testProgressCard.btnPractice.setOnClickListener {
+            testResultViewModel?.setListIds(viewModel?.allQuestion?.value!!)
+            testResultViewModel?.clearQuestions()
+            findNavController().navigate(R.id.action_testStartFragment_to_testFragment)
+        }
+
+        viewModel?.index?.observe(viewLifecycleOwner) {
+            val size = viewModel?.topicIds?.value!!.size
+            if (size > 0) {
+                if (it < size) {
+                    viewModel?.getData()
+                } else
+                    findNavController().popBackStack()
             }
-            else findNavController().popBackStack()
         }
     }
 
@@ -47,17 +66,25 @@ class TestStartFragment :
             }
         }
 
-        viewModel?.allQuestion?.observe(this) {
+        viewModel?.allQuestion?.observe(viewLifecycleOwner) {
             countAllQuestion = it.size
             binding.testResultBar.txtCountAll.text = "${it.size}"
         }
 
-        viewModel?.correctQuestion?.observe(this) {
+        viewModel?.correctQuestion?.observe(viewLifecycleOwner) {
             countCorrectQuestion = it.size
             binding.testResultBar.txtCountCorrect.text = "${it.size}"
+
+            binding.testResultBar.txtCountNew.text =
+                "${countAllQuestion - countCorrectQuestion - countWrongQuestion}"
+
+            if (countAllQuestion > 0) {
+                val progress: Int = (100.0 * countCorrectQuestion / countAllQuestion).toInt()
+                binding.testProgressCard.txtProgress.text = "$progress%"
+            }
         }
 
-        viewModel?.wrongQuestion?.observe(this) {
+        viewModel?.wrongQuestion?.observe(viewLifecycleOwner) {
             countWrongQuestion = it.size
             binding.testResultBar.txtCountIncorrect.text = "${it.size}"
             binding.testResultBar.txtCountNew.text =
@@ -72,5 +99,10 @@ class TestStartFragment :
         viewModel?.topicName?.observe(viewLifecycleOwner) {
             binding.toolbar.title = it
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        bindData()
     }
 }

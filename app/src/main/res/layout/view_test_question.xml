@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ln_question_card"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TextView
@@ -15,18 +17,18 @@
         android:textStyle="bold" />
 
     <LinearLayout
+        android:id="@+id/ln_play_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="17dp"
-        android:layout_marginVertical="10dp">
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/ln_play_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="17dp"
+            android:layout_marginVertical="10dp"
             android:orientation="horizontal">
 
-            <LinearLayout
+            <FrameLayout
                 android:id="@+id/btn_play"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
@@ -38,9 +40,28 @@
                     android:id="@+id/img_play"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
+                    android:layout_gravity="center"
                     android:background="@drawable/shape_circle_white"
                     android:src="@drawable/ic_play_button" />
-            </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ln_loading"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape_circle_white">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:scaleX="2.2"
+                        android:scaleY="2.2"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/animation_media_loading" />
+                </LinearLayout>
+
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/txt_start_time"
@@ -52,7 +73,7 @@
                 android:textSize="16sp" />
 
             <SeekBar
-                android:id="@+id/play_bar_progress"
+                android:id="@+id/playbar_progress"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -75,7 +96,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="28dp">
+        android:layout_marginHorizontal="28dp"
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/txt_content"
@@ -90,10 +112,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="28dp"
-        android:layout_marginVertical="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp">
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/img_image"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:src="@drawable/img_launcher" />

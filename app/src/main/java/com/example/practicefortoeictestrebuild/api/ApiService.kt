@@ -34,6 +34,12 @@ interface ApiService {
         @Query("topicId") topicId: String?
     ): Call<ApiResponse<MutableList<DataOverview>>>
 
+    @GET("/api/v1/questioncards/{questionId}")
+    fun getQuestion(
+        @Header("Authorization") authorization: String?,
+        @Path("questionId") questionId: String?
+    ): Call<ApiResponse<QuestionCard>>
+
     @POST("/api/v1/auth/login")
     fun login(
         @Body body: Map<String, String>
@@ -42,5 +48,13 @@ interface ApiService {
     @POST("/api/v1/auth/register")
     fun register(
         @Body body: Map<String, String>
+    ): Call<ApiResponse<Any>>
+
+    @PUT("/api/v1/progress/cards/study")
+    fun updateProgressCard(
+        @Header("Authorization") authorization: String?,
+        @Query("cardId") cardId: String,
+        @Query("status") status: String,
+        @Query("answer") answer: String
     ): Call<ApiResponse<Any>>
 }
