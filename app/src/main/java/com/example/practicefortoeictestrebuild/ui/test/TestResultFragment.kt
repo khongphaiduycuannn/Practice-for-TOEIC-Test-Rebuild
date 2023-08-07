@@ -47,7 +47,7 @@ class TestResultFragment :
 
         binding.testResultBar.btnNextPractice.setOnClickListener {
             viewModel?.indexPlusOne()
-            findNavController().navigate(R.id.action_testResultFragment_to_testStartFragment)
+            findNavController().popBackStack()
         }
     }
 
