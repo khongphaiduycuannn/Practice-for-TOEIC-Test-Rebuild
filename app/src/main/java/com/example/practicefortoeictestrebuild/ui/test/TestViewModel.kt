@@ -9,7 +9,7 @@ import com.example.practicefortoeictestrebuild.api.ApiService
 import com.example.practicefortoeictestrebuild.base.BaseViewModel
 import com.example.practicefortoeictestrebuild.base.DataResult
 import com.example.practicefortoeictestrebuild.model.DataOverview
-import com.example.practicefortoeictestrebuild.model.Topic
+import com.example.practicefortoeictestrebuild.model.TopicTest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -92,10 +92,10 @@ class TestViewModel : BaseViewModel() {
             apiService.getTopic(
                 MyApplication.getToken(),
                 index.value?.let { _topicIds.value?.get(it) })
-                .enqueue(object : Callback<ApiResponse<Topic>> {
+                .enqueue(object : Callback<ApiResponse<TopicTest>> {
                     override fun onResponse(
-                        call: Call<ApiResponse<Topic>>,
-                        response: Response<ApiResponse<Topic>>
+                        call: Call<ApiResponse<TopicTest>>,
+                        response: Response<ApiResponse<TopicTest>>
                     ) {
                         if (response.isSuccessful && response.body()?.data != null) {
                             _topicName.value = response.body()?.data!!.name
@@ -106,7 +106,7 @@ class TestViewModel : BaseViewModel() {
                         } else continuation.resume(0)
                     }
 
-                    override fun onFailure(call: Call<ApiResponse<Topic>>, t: Throwable) {
+                    override fun onFailure(call: Call<ApiResponse<TopicTest>>, t: Throwable) {
                         continuation.resume(0)
                     }
                 })

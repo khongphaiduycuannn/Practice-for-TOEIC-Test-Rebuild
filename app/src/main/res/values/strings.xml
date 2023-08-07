@@ -3,4 +3,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home">Home</string>
     <string name="category">Category</string>
+    <string-array name="vocabulary_learn">
+        <item>All</item>
+        <item>10 cards</item>
+    </string-array>
+    <string-array name="vocabulary_category">
+        <item>Default</item>
+        <item>New</item>
+        <item>Memorized</item>
+        <item>Unmemorized</item>
+    </string-array>
 </resources>

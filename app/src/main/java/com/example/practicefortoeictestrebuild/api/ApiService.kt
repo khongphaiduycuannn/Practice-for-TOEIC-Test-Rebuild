@@ -26,7 +26,7 @@ interface ApiService {
     fun getTopic(
         @Header("Authorization") authorization: String?,
         @Path("topicId") topicId: String?
-    ): Call<ApiResponse<Topic>>
+    ): Call<ApiResponse<TopicTest>>
 
     @GET("/api/v1/progress/cards/study")
     fun getProgressCard(
@@ -45,6 +45,12 @@ interface ApiService {
         @Header("Authorization") authorization: String?,
         @Query("group") name: String?
     ): Call<ApiResponse<MutableList<ProgressCourse>>>
+
+    @GET("/api/v1/topics/{topicId}")
+    fun getFlashCard(
+        @Header("Authorization") authorization: String?,
+        @Path("topicId") topicId: String?
+    ): Call<ApiResponse<TopicVocabulary>>
 
     @POST("/api/v1/auth/login")
     fun login(
