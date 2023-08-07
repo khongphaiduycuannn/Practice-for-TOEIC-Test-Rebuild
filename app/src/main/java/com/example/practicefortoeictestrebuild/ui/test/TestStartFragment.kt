@@ -6,6 +6,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.practicefortoeictestrebuild.R
 import com.example.practicefortoeictestrebuild.base.BaseFragment
 import com.example.practicefortoeictestrebuild.databinding.FragmentTestStartBinding
+import com.example.practicefortoeictestrebuild.utils.PopUpNotification
 import com.example.practicefortoeictestrebuild.utils.startLoading
 
 class TestStartFragment :
@@ -41,9 +42,17 @@ class TestStartFragment :
         }
 
         binding.testProgressCard.btnPractice.setOnClickListener {
-            testResultViewModel?.setListIds(viewModel?.allQuestion?.value!!)
-            testResultViewModel?.clearQuestions()
-            findNavController().navigate(R.id.action_testStartFragment_to_testFragment)
+            val listId = viewModel?.allQuestion?.value!!
+            if (listId.size == 0) {
+                val popUpNotification = PopUpNotification(requireContext())
+                popUpNotification.title.text = "Notification"
+                popUpNotification.message.text = "This topic doesn't have any question!"
+                popUpNotification.show(requireView())
+            } else {
+                testResultViewModel?.setListIds(listId)
+                testResultViewModel?.clearQuestions()
+                findNavController().navigate(R.id.action_testStartFragment_to_testFragment)
+            }
         }
 
         viewModel?.index?.observe(viewLifecycleOwner) {

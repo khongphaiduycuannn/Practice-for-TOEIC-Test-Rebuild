@@ -162,6 +162,10 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
                 fillCardData(it[index])
             fillCardSize()
         }
+
+        testViewModel?.topicName?.observe(viewLifecycleOwner) {
+            binding.toolbar.title = it
+        }
     }
 
     override fun onDestroy() {
