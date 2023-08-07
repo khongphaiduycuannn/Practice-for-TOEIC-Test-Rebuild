@@ -10,5 +10,6 @@ data class DataOverview(
     @SerializedName("status")
     val status: Int,
     @SerializedName("cardId")
-    val cardId: String
+    val cardId: String,
+    var progress: Int
 )

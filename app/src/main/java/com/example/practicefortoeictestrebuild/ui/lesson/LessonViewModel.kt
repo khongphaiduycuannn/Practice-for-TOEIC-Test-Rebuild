@@ -56,6 +56,22 @@ class LessonViewModel : BaseViewModel() {
         return DataResult.Success(tempList)
     }
 
+    fun updateProgressLesson() {
+        val apiService = ApiHelper.getInstance().create(ApiService::class.java)
+        apiService.updateProgressLesson(MyApplication.getToken(), lessonId.value!!).enqueue(object : Callback<ApiResponse<Any>> {
+            override fun onResponse(
+                call: Call<ApiResponse<Any>>,
+                response: Response<ApiResponse<Any>>
+            ) {
+
+            }
+
+            override fun onFailure(call: Call<ApiResponse<Any>>, t: Throwable) {
+
+            }
+        })
+    }
+
     fun getData() {
         executeTask(
             request = {

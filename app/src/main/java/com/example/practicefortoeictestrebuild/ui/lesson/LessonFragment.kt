@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.practicefortoeictestrebuild.adapter.DocumentAdapter
 import com.example.practicefortoeictestrebuild.base.BaseFragment
 import com.example.practicefortoeictestrebuild.databinding.FragmentLessonBinding
+import com.example.practicefortoeictestrebuild.ui.course.CourseViewModel
 import com.example.practicefortoeictestrebuild.utils.startLoading
 
 class LessonFragment : BaseFragment<FragmentLessonBinding>(FragmentLessonBinding::inflate) {
@@ -16,12 +17,19 @@ class LessonFragment : BaseFragment<FragmentLessonBinding>(FragmentLessonBinding
         }
     }
 
+    private val courseViewModel by lazy {
+        activity?.let {
+            ViewModelProvider(it)[CourseViewModel::class.java]
+        }
+    }
+
     private val loadingDialog by lazy { context?.let { Dialog(it) } }
 
     private val documentAdapter = DocumentAdapter()
 
     override fun initData() {
         viewModel?.getData()
+        viewModel?.updateProgressLesson()
     }
 
     override fun handleEvent() {
@@ -41,5 +49,7 @@ class LessonFragment : BaseFragment<FragmentLessonBinding>(FragmentLessonBinding
             documentAdapter.setData(it)
             binding.listDocument.adapter = documentAdapter
         }
+
+        courseViewModel?.updateLesson(viewModel?.lessonId!!.value!!, 1)
     }
 }

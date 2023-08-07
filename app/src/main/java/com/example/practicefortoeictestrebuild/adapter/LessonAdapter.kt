@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.practicefortoeictestrebuild.R
 import com.example.practicefortoeictestrebuild.databinding.ItemLessonBinding
 import com.example.practicefortoeictestrebuild.model.DataOverview
+import com.example.practicefortoeictestrebuild.ui.course.CourseViewModel
 import com.example.practicefortoeictestrebuild.ui.lesson.LessonViewModel
 
 class LessonAdapter(
@@ -40,6 +41,10 @@ class LessonAdapter(
                 viewModel?.setId(listLesson[position].id)
                 fragment.findNavController().navigate(R.id.action_courseFragment_to_lessonFragment)
             }
+
+            if (listLesson[position].progress == 1)
+                binding.imgStatus.setImageResource(R.drawable.ic_checked)
+            else binding.imgStatus.setImageResource(R.color.white)
         }
     }
 

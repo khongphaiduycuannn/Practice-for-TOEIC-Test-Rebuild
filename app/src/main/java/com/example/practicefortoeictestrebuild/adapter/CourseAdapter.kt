@@ -16,7 +16,7 @@ class CourseAdapter(
 
     private var listCourse: MutableList<Course> = mutableListOf()
 
-    private var isCollapsed: MutableList<Boolean> = mutableListOf()
+    var isCollapsed: MutableList<Boolean> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
         val view = LayoutInflater
@@ -35,6 +35,14 @@ class CourseAdapter(
         with(holder) {
             binding.seekbar.seekbar.isEnabled = false
             binding.txtTitle.text = currentCourse.title
+            if (isCollapsed[position]) {
+                binding.imgStatus.setImageResource(R.drawable.ic_more)
+                binding.lnBody.layoutParams = getParam(LayoutParams.MATCH_PARENT, 0)
+            } else {
+                binding.imgStatus.setImageResource(R.drawable.ic_collap)
+                binding.lnBody.layoutParams =
+                    getParam(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+            }
 
             binding.listLesson.adapter =
                 listCourse[position].listLessons?.let { LessonAdapter(it, fragment) }
@@ -58,7 +66,8 @@ class CourseAdapter(
 
     fun setData(data: MutableList<Course>) {
         listCourse = data
-        isCollapsed = MutableList(listCourse.size) { true }
+        if (isCollapsed.size != listCourse.size)
+            isCollapsed = MutableList(listCourse.size) { true }
         notifyDataSetChanged()
     }
 

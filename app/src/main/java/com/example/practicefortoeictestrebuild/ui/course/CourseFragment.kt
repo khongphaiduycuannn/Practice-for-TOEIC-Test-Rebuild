@@ -48,4 +48,12 @@ class CourseFragment : BaseFragment<FragmentCourseBinding>(FragmentCourseBinding
             binding.listCourse.adapter = courseAdapter
         }
     }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel?.listCourse?.observe(viewLifecycleOwner) {
+            courseAdapter.setData(it)
+            binding.listCourse.adapter = courseAdapter
+        }
+    }
 }
