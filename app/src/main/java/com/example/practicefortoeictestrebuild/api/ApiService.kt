@@ -52,6 +52,20 @@ interface ApiService {
         @Path("topicId") topicId: String?
     ): Call<ApiResponse<TopicVocabulary>>
 
+    @GET("/api/v1/progress/cards/review")
+    fun getProgressCardIdReview(
+        @Header("Authorization") authorization: String?,
+        @Query("review") review: String?
+    ): Call<ApiResponse<MutableList<DataOverview>>>
+
+    @PUT("/api/v1/progress/cards/review")
+    fun updateCardReviewStatus(
+        @Header("Authorization") authorization: String?,
+        @Query("cardId") cardId: String?,
+        @Query("status") status: String?,
+        @Query("answer") answer: String?
+    ): Call<ApiResponse<Any>>
+
     @POST("/api/v1/auth/login")
     fun login(
         @Body body: Map<String, String>

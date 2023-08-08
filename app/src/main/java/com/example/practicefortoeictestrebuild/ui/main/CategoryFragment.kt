@@ -13,14 +13,14 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>(FragmentCategoryB
         QuestionType(
             R.drawable.img_weak_question,
             "Weak Questions",
-            "0 question",
-            "weak"
+            "0 questions",
+            "1"
         ),
         QuestionType(
             R.drawable.img_familiar_question,
             "Familiar Questions",
-            "0 words",
-            "familiar"
+            "0 questions",
+            "2"
         ),
     )
 

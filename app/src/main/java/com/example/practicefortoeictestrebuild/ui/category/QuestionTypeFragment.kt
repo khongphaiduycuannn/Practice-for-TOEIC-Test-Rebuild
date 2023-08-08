@@ -1,4 +1,4 @@
-package com.example.practicefortoeictestrebuild.ui.test
+package com.example.practicefortoeictestrebuild.ui.category
 
 import android.app.Dialog
 import android.graphics.Color
@@ -10,34 +10,30 @@ import android.os.Looper
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
-import android.widget.LinearLayout.LayoutParams
+import android.widget.LinearLayout
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.practicefortoeictestrebuild.R
 import com.example.practicefortoeictestrebuild.base.BaseFragment
 import com.example.practicefortoeictestrebuild.databinding.DialogInternetErrorBinding
-import com.example.practicefortoeictestrebuild.databinding.FragmentTestBinding
+import com.example.practicefortoeictestrebuild.databinding.FragmentQuestionTypeBinding
 import com.example.practicefortoeictestrebuild.model.QuestionCard
+import com.example.practicefortoeictestrebuild.utils.startLoading
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
-class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::inflate) {
+class QuestionTypeFragment :
+    BaseFragment<FragmentQuestionTypeBinding>(FragmentQuestionTypeBinding::inflate) {
 
     private val viewModel by lazy {
         activity?.let {
-            ViewModelProvider(it)[TestResultViewModel::class.java]
+            ViewModelProvider(it)[QuestionTypeViewModel::class.java]
         }
     }
 
-    private val testViewModel by lazy {
-        activity?.let {
-            ViewModelProvider(it)[TestViewModel::class.java]
-        }
-    }
+    private val loadingDialog by lazy { Dialog(requireContext()) }
 
     private val internetDialog by lazy { Dialog(requireContext()) }
 
@@ -52,8 +48,7 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
         internetDialog.setCancelable(false)
         internetDialog.window?.apply {
             setLayout(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.WRAP_CONTENT
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT
             )
             attributes.apply {
                 gravity = Gravity.CENTER
@@ -62,14 +57,13 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
 
-        if (index >= viewModel?.questions?.value!!.size)
-            viewModel?.getQuestion(index, internetDialog)
-        else viewModel?.resetListQuestions()
-
-        viewModel?.startTime = LocalDateTime.now()
+        viewModel?.review = requireActivity().intent.getStringExtra("group")
+        viewModel?.getData()
     }
 
     override fun handleEvent() {
+        binding.toolbar.title = requireActivity().intent.getStringExtra("title")
+
         clearCard()
         binding.questionCard.result.btnContinue.setOnClickListener {
             clearCard()
@@ -83,8 +77,7 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
                 }
                 setSeekbar()
             } else {
-                viewModel?.endTime = LocalDateTime.now()
-                findNavController().navigate(R.id.action_testFragment_to_testResultFragment)
+//                findNavController().navigate(R.id.action_testFragment_to_testResultFragment)
             }
             index = index.coerceAtMost(viewModel?.getListSize()!! - 1)
         }
@@ -147,15 +140,25 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
 
         dialogBinding.btnRetry.setOnClickListener {
             internetDialog.dismiss()
-            if (index >= viewModel?.questions?.value!!.size)
-                viewModel?.getQuestion(index, internetDialog)
+            if (index >= viewModel?.questions?.value!!.size) viewModel?.getQuestion(
+                index,
+                internetDialog
+            )
             else viewModel?.resetListQuestions()
         }
     }
 
     override fun bindData() {
-        binding.seekBar.isEnabled = false
+        binding.seekbar.isEnabled = false
         setSeekbar()
+
+        viewModel?.isLoading?.observe(viewLifecycleOwner) {
+            if (it) {
+                loadingDialog.startLoading(false)
+            } else {
+                loadingDialog.dismiss()
+            }
+        }
 
         viewModel?.questions?.observe(viewLifecycleOwner) {
             if (index < viewModel?.questions?.value!!.size) {
@@ -164,8 +167,11 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
             }
         }
 
-        testViewModel?.topicName?.observe(viewLifecycleOwner) {
-            binding.toolbar.title = it
+        viewModel?.questionIds?.observe(viewLifecycleOwner) {
+            if (index < it.size && index >= viewModel?.questions?.value!!.size) {
+                viewModel?.getQuestion(index, internetDialog)
+            } else viewModel?.resetListQuestions()
+            setSeekbar()
         }
     }
 
@@ -175,16 +181,14 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
     }
 
     private fun clearCard() {
-        binding.questionCard.lnQuestionCard.layoutParams = LayoutParams(
-            LayoutParams.MATCH_PARENT,
-            0
+        binding.questionCard.lnQuestionCard.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, 0
         )
     }
 
     private fun fillCardSize() {
-        binding.questionCard.lnQuestionCard.layoutParams = LayoutParams(
-            LayoutParams.MATCH_PARENT,
-            LayoutParams.MATCH_PARENT
+        binding.questionCard.lnQuestionCard.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT
         )
     }
 
@@ -199,25 +203,22 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
         val content = card.children[0].question.content
         val userChoice = card.userChoice
         var correct = card.children[0].answer.answer[0].toString()
-        if (correct != "A" && correct != "B" && correct != "C" && correct != "D")
-            correct = card.children[0].answer.answer[1].toString()
+        if (correct != "A" && correct != "B" && correct != "C" && correct != "D") correct =
+            card.children[0].answer.answer[1].toString()
 
-        if (image.isNullOrEmpty())
-            setViewHeight(binding.questionCard.imgImage, 0)
+        if (image.isNullOrEmpty()) setViewHeight(binding.questionCard.imgImage, 0)
         else {
             fillImage(image)
             setViewHeight(binding.questionCard.imgImage, 500)
         }
 
-        if (sound.isNullOrEmpty())
-            setViewHeight(binding.questionCard.lnPlayBar, 0)
+        if (sound.isNullOrEmpty()) setViewHeight(binding.questionCard.lnPlayBar, 0)
         else {
             fillSound(sound)
-            setViewHeight(binding.questionCard.lnPlayBar, LayoutParams.WRAP_CONTENT)
+            setViewHeight(binding.questionCard.lnPlayBar, LinearLayout.LayoutParams.WRAP_CONTENT)
         }
 
-        if (userChoice == 0)
-            setViewHeight(binding.questionCard.result.resultArea, 0)
+        if (userChoice == 0) setViewHeight(binding.questionCard.result.resultArea, 0)
         else {
             enableChoiceButton(false)
             coloredAnswer(userChoice, correct)
@@ -230,12 +231,9 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
         val choice = card.children[0].answer.choices
         val answer = binding.questionCard.answer
         answer.txtAAnswer.text = choice[0]
-        if (choice.size > 1)
-            answer.txtBAnswer.text = choice[1]
-        if (choice.size > 2)
-            answer.txtCAnswer.text = choice[2]
-        if (choice.size > 3)
-            answer.txtDAnswer.text = choice[3]
+        if (choice.size > 1) answer.txtBAnswer.text = choice[1]
+        if (choice.size > 2) answer.txtCAnswer.text = choice[2]
+        if (choice.size > 3) answer.txtDAnswer.text = choice[3]
     }
 
     private fun fillImage(link: String) {
@@ -300,7 +298,9 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
     }
 
     private fun showResult() {
-        setViewHeight(binding.questionCard.result.resultArea, LayoutParams.WRAP_CONTENT)
+        setViewHeight(
+            binding.questionCard.result.resultArea, LinearLayout.LayoutParams.WRAP_CONTENT
+        )
     }
 
     private fun destroyCurrentCard() {
@@ -309,14 +309,14 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
     }
 
     private fun setSeekbar() {
-        binding.seekBar.max = viewModel?.getListSize()!!
-        binding.seekBar.progress = index + 1
+        binding.seekbar.max = viewModel?.getListSize()!!
+        binding.seekbar.progress = index + 1
         binding.txtProgress.text = "${index + 1}/${viewModel?.getListSize()}"
     }
 
     private fun setViewHeight(view: View, height: Int) {
-        view.layoutParams = LayoutParams(
-            LayoutParams.MATCH_PARENT, height
+        view.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, height
         )
     }
 
@@ -330,8 +330,8 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
     private fun chooseAnswer(choice: String) {
         val card = viewModel?.questions?.value!![index]
         var correct = card.children[0].answer.answer[0].toString()
-        if (correct != "A" && correct != "B" && correct != "C" && correct != "D")
-            correct = card.children[0].answer.answer[1].toString()
+        if (correct != "A" && correct != "B" && correct != "C" && correct != "D") correct =
+            card.children[0].answer.answer[1].toString()
 
         when (choice) {
             "A" -> card.userChoice = 1
@@ -343,11 +343,9 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
         coloredAnswer(card.userChoice, correct)
 
         if (choice != correct) {
-            testViewModel?.removeCorrectCard(card.id)
-            viewModel?.updateCard(card.id, "false")
+            viewModel?.updateCardReviewStatus(card.id, "false")
         } else {
-            testViewModel?.removeWrongCard(card.id)
-            viewModel?.updateCard(card.id, "true")
+            viewModel?.updateCardReviewStatus(card.id, "true")
         }
     }
 
