@@ -71,12 +71,11 @@ class FlashcardStartFragment :
 
         viewModel?.memorizedCard?.observe(viewLifecycleOwner) {
             binding.informationArea.txtMemorizedAmount.text = "${it.size}"
-
+            setSeekbar(it.size, viewModel?.allCard?.value!!.size)
         }
 
         viewModel?.unmemorizedCard?.observe(viewLifecycleOwner) {
             binding.informationArea.txtUnmemorizedAmount.text = "${it.size}"
-            setSeekbar(it.size, viewModel?.allCard?.value!!.size)
         }
     }
 
@@ -100,14 +99,12 @@ class FlashcardStartFragment :
     }
 
     private fun setSeekbar(amount: Int, total: Int) {
-        if (total < 0) return
-
+        if (total <= 0) return
+        val seekbar = binding.seekbar.seekbar
+        seekbar.max = total
+        seekbar.progress = amount
         Handler(Looper.getMainLooper()).postDelayed({
-            val seekbar = binding.seekbar.seekbar
             val width = seekbar.width - 2 * seekbar.paddingStart
-            seekbar.max = total
-            seekbar.progress = amount
-
             val thumbPos =
                 binding.linearLayout.marginStart + seekbar.paddingStart + 1.0 * width * amount / total - 85
             binding.seekbar.progress.text = "${(100.0 * amount / total).toInt()}%"

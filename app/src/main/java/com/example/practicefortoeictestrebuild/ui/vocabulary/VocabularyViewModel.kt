@@ -65,7 +65,7 @@ class VocabularyViewModel : BaseViewModel() {
         _topicId.value = id
     }
 
-    suspend fun getFlashCard(): DataResult<MutableList<FlashCard>> {
+    private suspend fun getFlashCard(): DataResult<MutableList<FlashCard>> {
         val apiService = ApiHelper.getInstance().create(ApiService::class.java)
 
         val allCard = mutableListOf<FlashCard>()
@@ -83,6 +83,7 @@ class VocabularyViewModel : BaseViewModel() {
                     response: Response<ApiResponse<TopicVocabulary>>
                 ) {
                     if (response.isSuccessful && response.body()?.data != null) {
+                        _topicName.value = response.body()?.data!!.name
                         val list = response.body()?.data!!.cards
                         list.forEach {
                             allCard.add(it)
@@ -157,6 +158,23 @@ class VocabularyViewModel : BaseViewModel() {
         )
     }
 
+    fun updateCard(cardId: String, answer: String) {
+        val apiService = ApiHelper.getInstance().create(ApiService::class.java)
+        apiService.updateProgressCard(MyApplication.getToken(), cardId, "0", answer)
+            .enqueue(object : Callback<ApiResponse<Any>> {
+                override fun onResponse(
+                    call: Call<ApiResponse<Any>>,
+                    response: Response<ApiResponse<Any>>
+                ) {
+
+                }
+
+                override fun onFailure(call: Call<ApiResponse<Any>>, t: Throwable) {
+
+                }
+            })
+    }
+
     fun setListCard(selectedCategory: String?) {
         when (selectedCategory) {
             "Default" -> _listCard.value = _allCard.value
@@ -164,5 +182,29 @@ class VocabularyViewModel : BaseViewModel() {
             "Memorized" -> _listCard.value = _memorizedCard.value
             "Unmemorized" -> _listCard.value = _unmemorizedCard.value
         }
+    }
+
+    fun memorizeCard(card: FlashCard) {
+        _unmemorizedCard.value?.remove(card)
+        _newCard.value?.remove(card)
+        if (_memorizedCard.value?.contains(card) == false) {
+            _memorizedCard.value?.add(card)
+        }
+        resetList()
+    }
+
+    fun unMemorizeCard(card: FlashCard) {
+        _memorizedCard.value?.remove(card)
+        _newCard.value?.remove(card)
+        if (_unmemorizedCard.value?.contains(card) == false) {
+            _unmemorizedCard.value?.add(card)
+        }
+        resetList()
+    }
+
+    private fun resetList() {
+        _memorizedCard.value = _memorizedCard.value
+        _unmemorizedCard.value = _unmemorizedCard.value
+        _newCard.value = _newCard.value
     }
 }

@@ -21,34 +21,41 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:scaleX="0.9"
-                android:scaleY="0.9"
-                android:src="@drawable/img_goodjob" />
+                android:layout_margin="12dp"
+                app:cardCornerRadius="500dp">
+
+                <ImageView
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/img_goodjob" />
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Excellent"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="20dp"
+                android:text="You just finished this topic"
                 android:textColor="#04C491"
-                android:textSize="26sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/btn_play_game"
+                android:id="@+id/btn_next_topic"
                 android:layout_width="130dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/bg_button_learn"
                 android:enabled="false"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="FINISH!!!"
+                android:text="NEXT TOPIC"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold" />
         </LinearLayout>
