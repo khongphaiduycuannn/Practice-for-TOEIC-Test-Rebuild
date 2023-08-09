@@ -58,6 +58,14 @@ interface ApiService {
         @Query("review") review: String?
     ): Call<ApiResponse<MutableList<DataOverview>>>
 
+    @GET("/api/v1/progress/calendar")
+    fun getDailyQuestionCard(
+        @Header("Authorization") authorization: String?,
+        @Query("year") year: String?,
+        @Query("month") month: String?,
+        @Query("day") day: String?
+    ): Call<ApiResponse<MutableList<QuestionCardDaily>>>
+
     @PUT("/api/v1/progress/cards/review")
     fun updateCardReviewStatus(
         @Header("Authorization") authorization: String?,
