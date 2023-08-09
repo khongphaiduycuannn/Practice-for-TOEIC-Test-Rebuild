@@ -74,8 +74,9 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
 
     override fun handleEvent() {
         clearCard()
+        viewModel?.resetListQuestions()
+
         binding.questionCard.result.btnContinue.setOnClickListener {
-            clearCard()
             destroyCurrentCard()
             index++
             if (index < viewModel?.getListSize()!!) {
@@ -85,11 +86,13 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
                     viewModel?.getQuestion(index, internetDialog)
                 }
                 setSeekbar()
+                clearCard()
             } else {
                 viewModel?.endTime = LocalDateTime.now()
                 findNavController().navigate(R.id.action_testFragment_to_testResultFragment)
             }
             index = index.coerceAtMost(viewModel?.getListSize()!! - 1)
+            viewModel?.resetListQuestions()
         }
 
         binding.questionCard.btnPlay.setOnClickListener {
@@ -197,27 +200,28 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
     }
 
     private fun fillCardSize() {
-        val view = binding.questionCard.lnQuestionCard
+        Handler(Looper.getMainLooper()).postDelayed({
+            val view = binding.questionCard.lnQuestionCard
 
-        if (targetHeight < 1) {
-            view.layoutParams = LayoutParams(
-                LayoutParams.MATCH_PARENT,
-                LayoutParams.MATCH_PARENT
-            )
-            return
-        }
-
-        val animator = ValueAnimator.ofInt(0, targetHeight)
-        animator.addUpdateListener { valueAnimator ->
-            val value = valueAnimator.animatedValue as Int
-            val layoutParams = view.layoutParams
-            layoutParams.height = value
-            view.layoutParams = layoutParams
-            view.requestLayout()
-        }
-        animator.duration = 200
-        animator.start()
-
+            if (targetHeight < 1) {
+                view.layoutParams = LayoutParams(
+                    LayoutParams.MATCH_PARENT,
+                    LayoutParams.MATCH_PARENT
+                )
+            }
+            else {
+                val animator = ValueAnimator.ofInt(0, targetHeight)
+                animator.addUpdateListener { valueAnimator ->
+                    val value = valueAnimator.animatedValue as Int
+                    val layoutParams = view.layoutParams
+                    layoutParams.height = value
+                    view.layoutParams = layoutParams
+                    view.requestLayout()
+                }
+                animator.duration = 200
+                animator.start()
+            }
+        }, 210)
     }
 
     private fun fillCardData(card: QuestionCard) {

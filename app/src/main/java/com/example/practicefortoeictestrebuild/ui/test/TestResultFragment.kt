@@ -37,6 +37,7 @@ class TestResultFragment :
 
     override fun handleEvent() {
         binding.testDetailCard.btnReview.setOnClickListener {
+            testResultViewModel?.resetListQuestions()
             findNavController().navigate(R.id.action_testResultFragment_to_testFragment)
         }
 
