@@ -1,5 +1,6 @@
 package com.example.practicefortoeictestrebuild.ui.test
 
+import android.animation.ValueAnimator
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -46,6 +47,8 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
     private var index = 0
 
     private var mediaPlayer: MediaPlayer? = null
+
+    private var targetHeight = 0
 
     override fun initData() {
         internetDialog.setContentView(dialogBinding.root)
@@ -175,17 +178,46 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
     }
 
     private fun clearCard() {
-        binding.questionCard.lnQuestionCard.layoutParams = LayoutParams(
-            LayoutParams.MATCH_PARENT,
-            0
-        )
+        val view = binding.questionCard.lnQuestionCard
+
+        val initialHeight = view.height
+        targetHeight = initialHeight
+
+        val animator = ValueAnimator.ofInt(initialHeight, 0)
+
+        animator.addUpdateListener { valueAnimator ->
+            val value = valueAnimator.animatedValue as Int
+            val layoutParams = view.layoutParams
+            layoutParams.height = value
+            view.layoutParams = layoutParams
+            view.requestLayout()
+        }
+        animator.duration = 200
+        animator.start()
     }
 
     private fun fillCardSize() {
-        binding.questionCard.lnQuestionCard.layoutParams = LayoutParams(
-            LayoutParams.MATCH_PARENT,
-            LayoutParams.MATCH_PARENT
-        )
+        val view = binding.questionCard.lnQuestionCard
+
+        if (targetHeight < 1) {
+            view.layoutParams = LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT
+            )
+            return
+        }
+
+        val animator = ValueAnimator.ofInt(0, targetHeight)
+        animator.addUpdateListener { valueAnimator ->
+            val value = valueAnimator.animatedValue as Int
+            val layoutParams = view.layoutParams
+            layoutParams.height = value
+            view.layoutParams = layoutParams
+            view.requestLayout()
+        }
+        animator.duration = 200
+        animator.start()
+
     }
 
     private fun fillCardData(card: QuestionCard) {
