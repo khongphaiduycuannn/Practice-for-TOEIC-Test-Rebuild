@@ -3,25 +3,18 @@ package com.example.practicefortoeictestrebuild.ui.calendar
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.children
-import com.example.practicefortoeictestrebuild.MyApplication
+import androidx.lifecycle.ViewModelProvider
 import com.example.practicefortoeictestrebuild.R
 import com.example.practicefortoeictestrebuild.adapter.DayViewContainer
 import com.example.practicefortoeictestrebuild.adapter.MonthViewContainer
-import com.example.practicefortoeictestrebuild.api.ApiHelper
-import com.example.practicefortoeictestrebuild.api.ApiResponse
-import com.example.practicefortoeictestrebuild.api.ApiService
 import com.example.practicefortoeictestrebuild.base.BaseFragment
 import com.example.practicefortoeictestrebuild.databinding.FragmentCalendarBinding
-import com.example.practicefortoeictestrebuild.model.QuestionCardDaily
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -30,19 +23,45 @@ import java.util.*
 
 class CalendarFragment : BaseFragment<FragmentCalendarBinding>(FragmentCalendarBinding::inflate) {
 
-    val calendarView by lazy { binding.calendarView }
+    private val viewModel by lazy {
+        activity?.let {
+            ViewModelProvider(it)[CalendarViewModel::class.java]
+        }
+    }
+
+    private val calendarView by lazy { binding.calendarView }
+
+    private val countQuestionsDaily: MutableMap<Int, Int> = mutableMapOf()
+
+    private val daysOfWeek by lazy { daysOfWeek(DayOfWeek.SUNDAY) }
 
     override fun initData() {
-
+        viewModel?.getDailyQuestionCard()
     }
 
     override fun handleEvent() {
         val currentMonth = YearMonth.now()
         val startMonth = currentMonth.minusMonths(100)
         val endMonth = currentMonth.plusMonths(100)
-        val daysOfWeek = daysOfWeek(DayOfWeek.SUNDAY)
-        val apiService = ApiHelper.getInstance().create(ApiService::class.java)
 
+        bindDay()
+        bindMonth()
+
+        calendarView.setup(startMonth, endMonth, daysOfWeek.first())
+        calendarView.scrollToMonth(currentMonth)
+        calendarView.setOnTouchListener { _, _ -> true }
+    }
+
+    override fun bindData() {
+        viewModel?.listQuestionCardDaily?.observe(viewLifecycleOwner) { list ->
+            list.forEach {
+                countQuestionsDaily[it.day] = it.cards.size
+            }
+            bindDay()
+        }
+    }
+
+    private fun bindDay() {
         calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
 
@@ -53,38 +72,9 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(FragmentCalendarB
                     return
                 }
 
-                if (data.date <= LocalDate.now()) {
-                    container.txtCountQuestion.alpha = 0.0F
-                    apiService.getDailyQuestionCard(
-                        MyApplication.getToken(),
-                        data.date.year.toString(),
-                        data.date.month.value.toString(),
-                        data.date.dayOfMonth.toString()
-                    ).enqueue(object : Callback<ApiResponse<MutableList<QuestionCardDaily>>> {
-                        override fun onResponse(
-                            call: Call<ApiResponse<MutableList<QuestionCardDaily>>>,
-                            response: Response<ApiResponse<MutableList<QuestionCardDaily>>>
-                        ) {
-                            var count = 0
-                            if (response.isSuccessful && response.body()?.data != null) {
-                                val data = response.body()?.data!!
-                                if (data.isNotEmpty())
-                                    count = data.first().cards.size
-                            }
-                            if (count > 0) {
-
-                                container.txtCountQuestion.text = "$count"
-                                container.txtCountQuestion.alpha = 1.0F
-                            }
-                        }
-
-                        override fun onFailure(
-                            call: Call<ApiResponse<MutableList<QuestionCardDaily>>>,
-                            t: Throwable
-                        ) {
-
-                        }
-                    })
+                if (countQuestionsDaily[data.date.dayOfMonth] != null) {
+                    container.txtCountQuestion.text = "${countQuestionsDaily[data.date.dayOfMonth]}"
+                    container.txtCountQuestion.alpha = 1.0F
                 }
 
                 if (data.date == LocalDate.now()) {
@@ -96,7 +86,9 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(FragmentCalendarB
                 container.txtDay.setBackgroundResource(R.color.white)
             }
         }
+    }
 
+    private fun bindMonth() {
         calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
             override fun create(view: View) = MonthViewContainer(view)
 
@@ -115,13 +107,5 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(FragmentCalendarB
                 }
             }
         }
-
-        calendarView.setup(startMonth, endMonth, daysOfWeek.first())
-        calendarView.scrollToMonth(currentMonth)
-        calendarView.setOnTouchListener { _, _ -> true }
-    }
-
-    override fun bindData() {
-
     }
 }

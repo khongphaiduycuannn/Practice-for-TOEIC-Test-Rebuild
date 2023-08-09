@@ -61,9 +61,8 @@ interface ApiService {
     @GET("/api/v1/progress/calendar")
     fun getDailyQuestionCard(
         @Header("Authorization") authorization: String?,
-        @Query("year") year: String?,
-        @Query("month") month: String?,
-        @Query("day") day: String?
+        @Query("year") year: Int?,
+        @Query("month") month: Int?
     ): Call<ApiResponse<MutableList<QuestionCardDaily>>>
 
     @PUT("/api/v1/progress/cards/review")
