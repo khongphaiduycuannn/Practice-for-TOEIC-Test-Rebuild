@@ -7,6 +7,7 @@ import com.example.practicefortoeictestrebuild.adapter.QuestionTypeAdapter
 import com.example.practicefortoeictestrebuild.base.BaseFragment
 import com.example.practicefortoeictestrebuild.databinding.FragmentCategoryBinding
 import com.example.practicefortoeictestrebuild.model.QuestionType
+import com.example.practicefortoeictestrebuild.utils.PopUpNotification
 
 class CategoryFragment : BaseFragment<FragmentCategoryBinding>(FragmentCategoryBinding::inflate) {
 
@@ -46,6 +47,12 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>(FragmentCategoryB
 
         val questionTypeAdapter = QuestionTypeAdapter(requireActivity())
         questionTypeAdapter.setData(listQuestionType)
+        questionTypeAdapter.setOnClick {
+            val popUpNotification = PopUpNotification(requireContext())
+            popUpNotification.title.text = "No data"
+            popUpNotification.message.text = "No data"
+            popUpNotification.show(requireView())
+        }
 
         binding.recyclerView.adapter = questionTypeAdapter
 
