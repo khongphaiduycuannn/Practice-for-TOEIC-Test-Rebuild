@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.practicefortoeictestrebuild"
-        minSdk 24
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -71,4 +71,8 @@ dependencies {
 
     // Colored elevation
     implementation 'com.github.ZieIony.carbon:carbon:3e929fcff4'
+
+    // Custom Calendar
+    implementation 'com.kizitonwose.calendar:view:2.3.0'
+    implementation 'com.kizitonwose.calendar:compose:2.3.0'
 }

@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
+import android.view.MenuItem
 import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -21,6 +22,7 @@ import com.example.practicefortoeictestrebuild.databinding.ActivityMainBinding
 import com.example.practicefortoeictestrebuild.databinding.DialogInternetErrorBinding
 import com.example.practicefortoeictestrebuild.databinding.ViewDrawerNavHeaderBinding
 import com.example.practicefortoeictestrebuild.model.User
+import com.example.practicefortoeictestrebuild.ui.calendar.CalendarActivity
 import com.example.practicefortoeictestrebuild.ui.login.LoginActivity
 import com.example.practicefortoeictestrebuild.utils.startLoading
 import com.simform.custombottomnavigation.Model
@@ -108,7 +110,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun setBottomNavigationWithNavController(savedInstanceState: Bundle?) {
-
         val activeIndex = savedInstanceState?.getInt("activeIndex") ?: 1
 
         val navController = findNavController(R.id.nav_fragment)
@@ -162,5 +163,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.calendar_menu, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.calendar -> {
+                startActivity(Intent(this, CalendarActivity::class.java))
+                overridePendingTransition(R.anim.transition_zoom_in, R.anim.transition_zoom_out)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
