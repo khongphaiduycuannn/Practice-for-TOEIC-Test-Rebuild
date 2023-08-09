@@ -97,4 +97,13 @@ interface ApiService {
         @Header("Authorization") authorization: String?,
         @Query("lessonId") lessonId: String,
     ): Call<ApiResponse<Any>>
+
+    @PUT("/api/v1/progress/calendar")
+    fun updateProgressCalendar(
+        @Header("Authorization") authorization: String?,
+        @Query("year") year: Int,
+        @Query("month") month: Int,
+        @Query("day") day: Int,
+        @Query("cardId") cardId: String
+    ): Call<ApiResponse<Any>>
 }
