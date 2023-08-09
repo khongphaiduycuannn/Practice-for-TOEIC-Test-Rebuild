@@ -12,10 +12,10 @@ import com.example.practicefortoeictestrebuild.model.QuestionType
 import com.example.practicefortoeictestrebuild.ui.category.QuestionTypeActivity
 
 class QuestionTypeAdapter(
-    private val listQuestionType: MutableList<QuestionType>,
     private val activity: Activity
 ) : RecyclerView.Adapter<QuestionTypeAdapter.QuestionTypeViewHolder>() {
 
+    private var listQuestionType: MutableList<QuestionType> = mutableListOf()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionTypeViewHolder {
         val view = LayoutInflater
             .from(parent.context)
@@ -44,6 +44,11 @@ class QuestionTypeAdapter(
                 )
             }
         }
+    }
+
+    fun setData(data: MutableList<QuestionType>) {
+        listQuestionType = data
+        notifyDataSetChanged()
     }
 
     class QuestionTypeViewHolder(view: View) : RecyclerView.ViewHolder(view) {

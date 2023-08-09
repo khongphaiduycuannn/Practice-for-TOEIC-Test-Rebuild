@@ -24,7 +24,7 @@ class HomeViewModel : BaseViewModel() {
 
     val user: LiveData<User> get() = _user
 
-    suspend fun getUser(token: String): DataResult<User?> {
+    private suspend fun getUser(): DataResult<User?> {
         val apiService = ApiHelper.getInstance().create(ApiService::class.java)
         return suspendCoroutine { continuation ->
             apiService.getUser(MyApplication.getToken())
@@ -50,7 +50,7 @@ class HomeViewModel : BaseViewModel() {
     fun getData(dialog: Dialog) {
         executeTask(
             request = {
-                getUser(MyApplication.getToken()!!)
+                getUser()
             },
             onSuccess = {
                 _user.value = it

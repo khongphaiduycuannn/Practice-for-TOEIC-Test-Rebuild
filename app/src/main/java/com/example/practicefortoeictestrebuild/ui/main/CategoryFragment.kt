@@ -1,5 +1,6 @@
 package com.example.practicefortoeictestrebuild.ui.main
 
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.practicefortoeictestrebuild.R
 import com.example.practicefortoeictestrebuild.adapter.QuestionTypeAdapter
@@ -24,8 +25,15 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>(FragmentCategoryB
         ),
     )
 
-    override fun initData() {
+    private val viewModel by lazy {
+        activity?.let {
+            ViewModelProvider(it)[CategoryViewModel::class.java]
+        }
+    }
 
+    override fun initData() {
+        viewModel?.getProgressCardIdReview("1")
+        viewModel?.getProgressCardIdReview("2")
     }
 
     override fun handleEvent() {
@@ -36,8 +44,24 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>(FragmentCategoryB
         binding.viewHomeHeader.txtTitle.text = "Category"
         binding.viewHomeHeader.txtContent.text = "Your Category Questions"
 
-        binding.recyclerView.adapter = QuestionTypeAdapter(
-            listQuestionType, requireActivity()
-        )
+        val questionTypeAdapter = QuestionTypeAdapter(requireActivity())
+        questionTypeAdapter.setData(listQuestionType)
+
+        binding.recyclerView.adapter = questionTypeAdapter
+
+        viewModel?.weakCount?.observe(viewLifecycleOwner) {
+            listQuestionType[0].information = "$it questions"
+            questionTypeAdapter.setData(listQuestionType)
+        }
+
+        viewModel?.familiarCount?.observe(viewLifecycleOwner) {
+            listQuestionType[1].information = "$it questions"
+            questionTypeAdapter.setData(listQuestionType)
+        }
+    }
+
+    override fun onResume() {
+        initData()
+        super.onResume()
     }
 }
