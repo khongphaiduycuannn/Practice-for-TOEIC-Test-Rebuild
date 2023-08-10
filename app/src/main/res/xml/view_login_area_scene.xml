@@ -10,7 +10,7 @@
             android:layout_height="100dp"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="-100dp"
+            android:layout_marginTop="-50dp"
             android:id="@+id/img_launcher_icon" />
         <Constraint
             motion:layout_constraintEnd_toEndOf="parent"
@@ -72,6 +72,14 @@
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="15dp"
             android:id="@+id/ln_password" />
+        <Constraint
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            motion:layout_constraintTop_toBottomOf="@+id/error_message"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="83dp"
+            android:id="@+id/btn_login" />
     </ConstraintSet>
     <ConstraintSet android:id="@+id/end" >
         <Constraint
