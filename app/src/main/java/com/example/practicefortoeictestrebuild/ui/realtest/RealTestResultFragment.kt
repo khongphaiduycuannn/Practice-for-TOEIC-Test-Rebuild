@@ -66,14 +66,16 @@ class RealTestResultFragment :
         binding.testDetailCard.txtCountTotalTime.text = "${formattedTime(duration)}"
 
         testViewModel?.allQuestion?.observe(viewLifecycleOwner) {
+            countAllQuestion = it.size
             binding.testDetailCard.txtCountTotalQuestion.text = "${it.size}"
         }
 
         testViewModel?.correctQuestion?.observe(viewLifecycleOwner) {
+            countCorrectQuestion = it.size
             binding.testDetailCard.txtCountCorrect.text = "${it.size}"
 
             if (countAllQuestion > 0) {
-                val progress: Int = (100.0 * countCorrectQuestion / countAllQuestion).toInt()
+                val progress: Int = (100.0 * it.size / countAllQuestion).toInt()
                 binding.testDetailCard.txtProgress.text = "$progress%"
             }
         }
