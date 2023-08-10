@@ -63,7 +63,10 @@ class TopicAdapter(
                     testViewModel?.index?.value = position
                     testViewModel?.setTopicId(list)
 
-                    fragment.findNavController()
+                    if (courseViewModel?.group?.value == "test")
+                        fragment.findNavController()
+                            .navigate(R.id.action_courseFragment_to_realTestFragment)
+                    else fragment.findNavController()
                         .navigate(R.id.action_courseFragment_to_testStartFragment)
                 }
             }

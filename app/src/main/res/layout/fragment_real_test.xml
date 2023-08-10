@@ -22,59 +22,47 @@
             app:title="Topic name"
             app:titleTextAppearance="@style/title_style" />
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="27dp"
             android:layout_marginVertical="10dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="0dp"
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="60dp"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
+                android:src="@drawable/ic_clock" />
+
+            <TextView
+                android:id="@+id/txt_remaining_time"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:scaleX="0.7"
-                    android:scaleY="0.7"
-                    android:src="@drawable/ic_clock"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/textView"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="00:00:01"
-                    android:textAlignment="center"
-                    android:textColor="#010101"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="00:00:01"
+                android:textAlignment="center"
+                android:textColor="#010101"
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txt_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="end"
                 android:layout_marginVertical="10dp"
                 android:gravity="center"
                 android:text="0/20"
                 android:textColor="#010101"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-        </LinearLayout>
+        </FrameLayout>
 
         <include
             android:id="@+id/question_card"
