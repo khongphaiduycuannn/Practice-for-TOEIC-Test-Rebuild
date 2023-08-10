@@ -1,9 +1,12 @@
 package com.example.practicefortoeictestrebuild.adapter
 
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout.LayoutParams
+import androidx.core.view.marginStart
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.practicefortoeictestrebuild.R
@@ -33,6 +36,19 @@ class CourseAdapter(
         val currentCourse = listCourse[position]
 
         with(holder) {
+            var total = 0
+            var progress = 0
+            currentCourse.listLessons?.forEach {
+                progress += it.progress
+                total += 100
+            }
+            currentCourse.listTopics?.forEach {
+                progress += it.progress
+                total += 100
+            }
+            binding.txtTotalLevels.text = "${total/100} Levels"
+            setSeekbar(progress, total)
+
             binding.seekbar.seekbar.isEnabled = false
             binding.txtTitle.text = currentCourse.title
             if (isCollapsed[position]) {
@@ -79,5 +95,19 @@ class CourseAdapter(
 
     class CourseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding by lazy { ItemCourseBinding.bind(view) }
+
+        fun setSeekbar(amount: Int, total: Int) {
+            if (total <= 0) return
+            val seekbar = binding.seekbar.seekbar
+            seekbar.max = total
+            seekbar.progress = amount
+            Handler(Looper.getMainLooper()).postDelayed({
+                val width = seekbar.width - 2 * seekbar.paddingStart
+                val thumbPos =
+                        binding.linearLayout.marginStart + seekbar.paddingStart + 1.0 * width * amount / total - 35
+                binding.seekbar.progress.text = "${(100.0 * amount / total).toInt()}%"
+                binding.seekbar.clThumb.x = thumbPos.toFloat()
+            }, 100)
+        }
     }
 }

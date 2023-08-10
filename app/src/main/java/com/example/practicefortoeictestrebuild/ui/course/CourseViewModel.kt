@@ -3,7 +3,6 @@ package com.example.practicefortoeictestrebuild.ui.course
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.practicefortoeictestrebuild.MyApplication
-import com.example.practicefortoeictestrebuild.adapter.CourseAdapter
 import com.example.practicefortoeictestrebuild.api.ApiHelper
 import com.example.practicefortoeictestrebuild.api.ApiResponse
 import com.example.practicefortoeictestrebuild.api.ApiService
@@ -114,12 +113,14 @@ class CourseViewModel : BaseViewModel() {
                 if (progressCourse.id == course.id) {
                     progressCourse.listLessons.forEach { lessonId ->
                         course.listLessons?.forEach {
-                            if (it.id == lessonId) it.progress = 1
+                            if (it.id == lessonId) it.progress = 100
                         }
                     }
 
-                    progressCourse.listTopics.forEach {
-
+                    progressCourse.listTopics.forEach { topic ->
+                        course.listTopics?.forEach {
+                            if (it.id == topic.id) it.progress = topic.progress
+                        }
                     }
                 }
             }

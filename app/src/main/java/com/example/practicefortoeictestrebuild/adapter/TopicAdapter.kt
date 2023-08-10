@@ -49,6 +49,7 @@ class TopicAdapter(
     override fun onBindViewHolder(holder: TopicViewHolder, position: Int) {
         with(holder) {
             binding.txtTitle.text = listTopic[position].name
+            binding.txtProgress.text = "${listTopic[position].progress}%"
 
             binding.lnTopic.setOnClickListener {
                 if (courseViewModel?.group?.value == "vocabulary") {

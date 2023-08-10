@@ -42,7 +42,7 @@ class LessonAdapter(
                 fragment.findNavController().navigate(R.id.action_courseFragment_to_lessonFragment)
             }
 
-            if (listLesson[position].progress == 1)
+            if (listLesson[position].progress == 100)
                 binding.imgStatus.setImageResource(R.drawable.ic_checked)
             else binding.imgStatus.setImageResource(R.color.white)
         }
