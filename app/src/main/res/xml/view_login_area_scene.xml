@@ -10,7 +10,7 @@
             android:layout_height="100dp"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="-100dp"
             android:id="@+id/img_launcher_icon" />
         <Constraint
             motion:layout_constraintEnd_toEndOf="parent"
@@ -87,7 +87,7 @@
         motion:constraintSetStart="@+id/start"
         motion:constraintSetEnd="@+id/body"
         motion:autoTransition="animateToEnd"
-        motion:duration="600" />
+        motion:duration="800" />
     <Transition
         motion:constraintSetStart="@+id/body"
         motion:constraintSetEnd="@+id/end"
