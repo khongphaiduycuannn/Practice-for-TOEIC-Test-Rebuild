@@ -330,7 +330,7 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
         } else {
             result.imgImage.setImageResource(R.drawable.img_huhu)
             result.txtResult.text = "Incorrect"
-            result.txtResult.setTextColor(requireContext().getColor(carbon.R.color.carbon_red_200))
+            result.txtResult.setTextColor(requireContext().getColor(carbon.R.color.carbon_red_400))
         }
         showResult()
     }

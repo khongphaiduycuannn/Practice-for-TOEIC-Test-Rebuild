@@ -54,6 +54,37 @@ class TestViewModel : BaseViewModel() {
         _topicIds.value = list
     }
 
+    private suspend fun getQuestionWithoutProgress(): DataResult<Boolean> {
+        val apiService = ApiHelper.getInstance().create(ApiService::class.java)
+
+        val allQuestion = mutableListOf<String>()
+        val y = suspendCoroutine { continuation ->
+            apiService.getTopic(
+                MyApplication.getToken(),
+                index.value?.let { _topicIds.value?.get(it) })
+                .enqueue(object : Callback<ApiResponse<TopicTest>> {
+                    override fun onResponse(
+                        call: Call<ApiResponse<TopicTest>>,
+                        response: Response<ApiResponse<TopicTest>>
+                    ) {
+                        if (response.isSuccessful && response.body()?.data != null) {
+                            _topicName.value = response.body()?.data!!.name
+                            response.body()?.data!!.cards.forEach {
+                                allQuestion.add(it.id)
+                            }
+                            continuation.resume(1)
+                        } else continuation.resume(0)
+                    }
+
+                    override fun onFailure(call: Call<ApiResponse<TopicTest>>, t: Throwable) {
+                        continuation.resume(0)
+                    }
+                })
+        }
+        _allQuestion.value = allQuestion
+        return DataResult.Success(true)
+    }
+
     private suspend fun getQuestion(): DataResult<Boolean> {
         val apiService = ApiHelper.getInstance().create(ApiService::class.java)
 
@@ -131,6 +162,19 @@ class TestViewModel : BaseViewModel() {
             })
     }
 
+    fun getDataWithOutProgress() {
+        executeTask(
+            request = {
+                getQuestionWithoutProgress()
+            },
+            onSuccess = {
+
+            },
+            onError = {
+
+            })
+    }
+
     fun removeCorrectCard(id: String) {
         _correctQuestion.value?.remove(id)
         if (_wrongQuestion.value?.contains(id) == false) {
@@ -147,5 +191,10 @@ class TestViewModel : BaseViewModel() {
 
     fun indexPlusOne() {
         index.value = index.value!! + 1
+    }
+
+    fun clearCorrect() {
+        _correctQuestion.value = mutableListOf()
+        _wrongQuestion.value = mutableListOf()
     }
 }

@@ -203,27 +203,27 @@ class QuestionTypeFragment :
     }
 
     private fun fillCardSize() {
-        val view = binding.questionCard.lnQuestionCard
+        Handler(Looper.getMainLooper()).postDelayed({
+            val view = binding.questionCard.lnQuestionCard
 
-        if (targetHeight < 1) {
-            view.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-            )
-            return
-        }
-
-        val animator = ValueAnimator.ofInt(0, targetHeight)
-        animator.addUpdateListener { valueAnimator ->
-            val value = valueAnimator.animatedValue as Int
-            val layoutParams = view.layoutParams
-            layoutParams.height = value
-            view.layoutParams = layoutParams
-            view.requestLayout()
-        }
-        animator.duration = 200
-        animator.start()
-
+            if (targetHeight < 1) {
+                view.layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+                )
+            } else {
+                val animator = ValueAnimator.ofInt(0, targetHeight)
+                animator.addUpdateListener { valueAnimator ->
+                    val value = valueAnimator.animatedValue as Int
+                    val layoutParams = view.layoutParams
+                    layoutParams.height = value
+                    view.layoutParams = layoutParams
+                    view.requestLayout()
+                }
+                animator.duration = 200
+                animator.start()
+            }
+        }, 210)
     }
 
     private fun fillCardData(card: QuestionCard) {
@@ -326,7 +326,7 @@ class QuestionTypeFragment :
         } else {
             result.imgImage.setImageResource(R.drawable.img_huhu)
             result.txtResult.text = "Incorrect"
-            result.txtResult.setTextColor(requireContext().getColor(carbon.R.color.carbon_red_200))
+            result.txtResult.setTextColor(requireContext().getColor(carbon.R.color.carbon_red_400))
         }
         showResult()
     }
