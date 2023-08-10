@@ -14,6 +14,7 @@ import com.example.practicefortoeictestrebuild.model.QuestionCard
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDateTime
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -30,6 +31,18 @@ class QuestionTypeViewModel : BaseViewModel() {
     val questions: LiveData<MutableList<QuestionCard>> get() = _questions
 
     val questionIds: LiveData<MutableList<String>> get() = _questionIds
+
+    var correctCount = MutableLiveData<Int>().apply {
+        value = 0
+    }
+
+    var incorrectCount = MutableLiveData<Int>().apply {
+        value = 0
+    }
+
+    var startTime: LocalDateTime? = null
+
+    var endTime: LocalDateTime? = null
 
     var review: String? = "1"
 

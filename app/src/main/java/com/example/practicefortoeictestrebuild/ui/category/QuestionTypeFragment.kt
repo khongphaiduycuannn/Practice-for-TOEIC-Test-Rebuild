@@ -13,6 +13,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.practicefortoeictestrebuild.R
 import com.example.practicefortoeictestrebuild.base.BaseFragment
@@ -23,6 +24,7 @@ import com.example.practicefortoeictestrebuild.utils.startLoading
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 
 class QuestionTypeFragment :
@@ -61,7 +63,7 @@ class QuestionTypeFragment :
         }
 
         viewModel?.review = requireActivity().intent.getStringExtra("group")
-        viewModel?.getData()
+        viewModel?.startTime = LocalDateTime.now()
     }
 
     override fun handleEvent() {
@@ -80,7 +82,7 @@ class QuestionTypeFragment :
                 }
                 setSeekbar()
             } else {
-//                findNavController().navigate(R.id.action_testFragment_to_testResultFragment)
+                findNavController().navigate(R.id.action_questionTypeFragment_to_questionTypeResultFragment)
             }
             index = index.coerceAtMost(viewModel?.getListSize()!! - 1)
         }
@@ -377,8 +379,10 @@ class QuestionTypeFragment :
         coloredAnswer(card.userChoice, correct)
 
         if (choice != correct) {
+            viewModel?.incorrectCount?.value = viewModel?.incorrectCount?.value!! + 1
             viewModel?.updateCardReviewStatus(card.id, "false")
         } else {
+            viewModel?.correctCount?.value = viewModel?.correctCount?.value!! + 1
             viewModel?.updateCardReviewStatus(card.id, "true")
         }
     }
