@@ -31,5 +31,15 @@ class MyApplication : Application() {
             val setting = getAppContext()?.getSharedPreferences("app_status", 0)
             setting?.edit()?.putString("access_token", null)?.apply()
         }
+
+        fun getScheduleNotifyStatus(): Int? {
+            val setting = getAppContext()?.getSharedPreferences("app_status", 0)
+            return setting?.getInt("scheduleNotification", 0)
+        }
+
+        fun setScheduleNotifyStatus(status: Int) {
+            val setting = getAppContext()?.getSharedPreferences("app_status", 0)
+            setting?.edit()?.putInt("scheduleNotification", status)?.apply()
+        }
     }
 }

@@ -21,6 +21,8 @@ import com.example.practicefortoeictestrebuild.base.BaseActivity
 import com.example.practicefortoeictestrebuild.databinding.ActivityMainBinding
 import com.example.practicefortoeictestrebuild.databinding.DialogInternetErrorBinding
 import com.example.practicefortoeictestrebuild.databinding.ViewDrawerNavHeaderBinding
+import com.example.practicefortoeictestrebuild.model.AlarmItem
+import com.example.practicefortoeictestrebuild.model.AlarmScheduler
 import com.example.practicefortoeictestrebuild.model.User
 import com.example.practicefortoeictestrebuild.ui.calendar.CalendarActivity
 import com.example.practicefortoeictestrebuild.ui.login.LoginActivity
@@ -135,6 +137,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     private fun setDrawerNavigationWithNavController() {
+        val alarmScheduler = AlarmScheduler(applicationContext)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = ""
 
@@ -145,10 +148,35 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         val navController = findNavController(R.id.nav_fragment)
         binding.drawerView.setupWithNavController(navController)
 
+        val btnSwitch =
+            binding.drawerView.menu.findItem(R.id.btn_notify).actionView?.findViewById<androidx.appcompat.widget.SwitchCompat>(
+                R.id.btn_switch
+            )
+        if (MyApplication.getScheduleNotifyStatus() == 1) {
+            btnSwitch?.isChecked = true
+        } else if (MyApplication.getScheduleNotifyStatus() == 2) {
+            btnSwitch?.isChecked = false
+        } else {
+            btnSwitch?.isChecked = true
+            MyApplication.setScheduleNotifyStatus(1)
+            alarmScheduler.schedule(AlarmItem(getString(R.string.app_name)))
+        }
+
         binding.drawerView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_logout -> {
                     logout()
+                }
+                R.id.btn_notify -> {
+                    if (MyApplication.getScheduleNotifyStatus() == 1) {
+                        MyApplication.setScheduleNotifyStatus(2)
+                        alarmScheduler.cancel(AlarmItem(getString(R.string.app_name)))
+                        btnSwitch?.isChecked = false
+                    } else if (MyApplication.getScheduleNotifyStatus() == 2) {
+                        MyApplication.setScheduleNotifyStatus(1)
+                        alarmScheduler.schedule(AlarmItem(getString(R.string.app_name)))
+                        btnSwitch?.isChecked = true
+                    }
                 }
             }
             true
