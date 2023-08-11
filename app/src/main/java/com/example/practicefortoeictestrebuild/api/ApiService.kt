@@ -70,6 +70,12 @@ interface ApiService {
         @Query("month") month: Int?
     ): Call<ApiResponse<MutableList<QuestionCardDaily>>>
 
+    @GET("/api/v1/game/single")
+    fun getFlashcardGame(
+        @Header("Authorization") authorization: String?,
+        @Query("topicId") topicId: String?,
+    ): Call<ApiResponse<MutableList<FlashcardQuestion>>>
+
     @PUT("/api/v1/progress/cards/review")
     fun updateCardReviewStatus(
         @Header("Authorization") authorization: String?,

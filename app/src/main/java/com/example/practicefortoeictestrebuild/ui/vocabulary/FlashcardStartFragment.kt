@@ -42,6 +42,10 @@ class FlashcardStartFragment :
             } else findNavController().navigate(R.id.action_flashcardStartFragment_to_flashcardLearnFragment)
         }
 
+        binding.btnPlayGame.setOnClickListener {
+            findNavController().navigate(R.id.action_flashcardStartFragment_to_flashcardGameFragment)
+        }
+
         binding.dropTextCategory.setOnItemClickListener { parent, _, position, _ ->
             val item = parent.getItemAtPosition(position).toString()
             viewModel?.setListCard(item)

@@ -55,7 +55,7 @@
                 android:enabled="false"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="NEXT TOPIC"
+                android:text="FINISH!"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold" />
         </LinearLayout>

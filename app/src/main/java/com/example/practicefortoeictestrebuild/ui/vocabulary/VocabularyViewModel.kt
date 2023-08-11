@@ -10,6 +10,7 @@ import com.example.practicefortoeictestrebuild.base.BaseViewModel
 import com.example.practicefortoeictestrebuild.base.DataResult
 import com.example.practicefortoeictestrebuild.model.DataOverview
 import com.example.practicefortoeictestrebuild.model.FlashCard
+import com.example.practicefortoeictestrebuild.model.FlashcardQuestion
 import com.example.practicefortoeictestrebuild.model.TopicVocabulary
 import retrofit2.Call
 import retrofit2.Callback
@@ -47,6 +48,10 @@ class VocabularyViewModel : BaseViewModel() {
         value = mutableListOf()
     }
 
+    private val _questions = MutableLiveData<MutableList<FlashcardQuestion>>().apply {
+        value = mutableListOf()
+    }
+
     val allCard: LiveData<MutableList<FlashCard>> get() = _allCard
 
     val newCard: LiveData<MutableList<FlashCard>> get() = _newCard
@@ -56,6 +61,8 @@ class VocabularyViewModel : BaseViewModel() {
     val unmemorizedCard: LiveData<MutableList<FlashCard>> get() = _unmemorizedCard
 
     val listCard: LiveData<MutableList<FlashCard>> get() = _listCard
+
+    val questions: LiveData<MutableList<FlashcardQuestion>> get() = _questions
 
     val topicId: LiveData<String> get() = _topicId
 
@@ -187,9 +194,37 @@ class VocabularyViewModel : BaseViewModel() {
         return DataResult.Success(allCard)
     }
 
+    private suspend fun getQuestion() {
+        val apiService = ApiHelper.getInstance().create(ApiService::class.java)
+
+        val x = suspendCoroutine { continuation ->
+            apiService.getFlashcardGame(MyApplication.getToken(), topicId.value).enqueue(
+                object : Callback<ApiResponse<MutableList<FlashcardQuestion>>> {
+                    override fun onResponse(
+                        call: Call<ApiResponse<MutableList<FlashcardQuestion>>>,
+                        response: Response<ApiResponse<MutableList<FlashcardQuestion>>>
+                    ) {
+                        if (response.isSuccessful && response.body()?.data != null) {
+                            _questions.value = response.body()?.data!!
+                        }
+                        continuation.resume(1)
+                    }
+
+                    override fun onFailure(
+                        call: Call<ApiResponse<MutableList<FlashcardQuestion>>>,
+                        t: Throwable
+                    ) {
+                        continuation.resume(0)
+                    }
+                }
+            )
+        }
+    }
+
     fun getData() {
         executeTask(
             request = {
+                getQuestion()
                 getFlashCard()
             },
             onSuccess = {
@@ -259,6 +294,17 @@ class VocabularyViewModel : BaseViewModel() {
             _unmemorizedCard.value?.add(card)
         }
         resetList()
+    }
+
+    fun resetListQuestions() {
+        _questions.value = _questions.value
+    }
+
+    fun clearQuestions() {
+        _questions.value?.forEach {
+            it.userChoice = 0
+        }
+        _questions.value = _questions.value
     }
 
     private fun resetList() {

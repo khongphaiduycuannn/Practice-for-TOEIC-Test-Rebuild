@@ -99,6 +99,13 @@
             app:exitAnim="@anim/transition_zoom_out"
             app:popEnterAnim="@anim/transition_zoom_in"
             app:popExitAnim="@anim/transition_zoom_out" />
+        <action
+            android:id="@+id/action_flashcardStartFragment_to_flashcardGameFragment"
+            app:destination="@id/flashcardGameFragment"
+            app:enterAnim="@anim/transition_zoom_in"
+            app:exitAnim="@anim/transition_zoom_out"
+            app:popEnterAnim="@anim/transition_zoom_in"
+            app:popExitAnim="@anim/transition_zoom_out" />
     </fragment>
     <fragment
         android:id="@+id/flashcardLearnFragment"
@@ -132,6 +139,36 @@
             app:popEnterAnim="@anim/transition_zoom_in"
             app:popExitAnim="@anim/transition_zoom_out"
             app:popUpTo="@id/realTestResultFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/flashcardGameFragment"
+        android:name="com.example.practicefortoeictestrebuild.ui.vocabulary.FlashcardGameFragment"
+        android:label="fragment_flashcard_game"
+        tools:layout="@layout/fragment_flashcard_game" >
+        <action
+            android:id="@+id/action_flashcardGameFragment_to_flashcardGameResultFragment"
+            app:destination="@id/flashcardGameResultFragment"
+            app:enterAnim="@anim/transition_zoom_in"
+            app:exitAnim="@anim/transition_zoom_out"
+            app:popEnterAnim="@anim/transition_zoom_in"
+            app:popExitAnim="@anim/transition_zoom_out"
+            app:popUpTo="@id/flashcardGameFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/flashcardGameResultFragment"
+        android:name="com.example.practicefortoeictestrebuild.ui.vocabulary.FlashcardGameResultFragment"
+        android:label="fragment_flashcard_game_result"
+        tools:layout="@layout/fragment_flashcard_game_result" >
+        <action
+            android:id="@+id/action_flashcardGameResultFragment_to_flashcardGameFragment"
+            app:destination="@id/flashcardGameFragment"
+            app:enterAnim="@anim/transition_zoom_in"
+            app:exitAnim="@anim/transition_zoom_out"
+            app:popEnterAnim="@anim/transition_zoom_in"
+            app:popExitAnim="@anim/transition_zoom_out"
+            app:popUpTo="@id/flashcardGameResultFragment"
             app:popUpToInclusive="true" />
     </fragment>
 </navigation>

@@ -54,8 +54,23 @@
                 android:text="LEARN"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_play_game"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/menu_category" />
+
+            <TextView
+                android:id="@+id/btn_play_game"
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/bg_button_next_practice"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="PLAY GAME"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_learn"
                 app:layout_constraintTop_toBottomOf="@+id/menu_category" />
 
             <TextView
