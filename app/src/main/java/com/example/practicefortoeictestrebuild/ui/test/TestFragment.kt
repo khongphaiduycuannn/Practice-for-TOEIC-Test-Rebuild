@@ -226,6 +226,7 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
 
     private fun fillCardData(card: QuestionCard) {
         binding.questionCard.btnPlay.isEnabled = false
+        binding.questionCard.txtTitle.text = "Question ${index + 1}"
         enableChoiceButton(true)
         fillBlankAnswer()
 

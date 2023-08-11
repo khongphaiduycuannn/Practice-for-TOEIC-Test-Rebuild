@@ -214,6 +214,7 @@ class FlashcardGameFragment :
 
     private fun fillCardData(card: FlashcardQuestion) {
         binding.questionCard.btnPlay.isEnabled = false
+        binding.questionCard.txtTitle.text = "Question ${index + 1}"
         enableChoiceButton(true)
         fillBlankAnswer()
 
@@ -234,6 +235,7 @@ class FlashcardGameFragment :
             correct = "D"
 
         binding.questionCard.result.txtTitleExplanation.visibility = View.GONE
+        binding.questionCard.result.txtExplanation.visibility = View.GONE
 
         if (image.isNullOrEmpty())
             setViewHeight(binding.questionCard.imgImage, 0)
