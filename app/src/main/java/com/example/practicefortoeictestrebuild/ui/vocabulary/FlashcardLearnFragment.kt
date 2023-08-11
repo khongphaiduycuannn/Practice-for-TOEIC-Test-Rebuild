@@ -12,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -83,8 +84,19 @@ class FlashcardLearnFragment :
         onCardTouchListener()
         onSoundClickListener()
 
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (viewModel?.topicName?.value != "Flashcard Daily")
+                    findNavController().popBackStack()
+                else findNavController().navigate(R.id.action_flashcardLearnFragment2_to_calendarFragment)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
         binding.cardThird.btnNextTopic.setOnClickListener {
-            findNavController().popBackStack()
+            if (viewModel?.topicName?.value != "Flashcard Daily")
+                findNavController().popBackStack()
+            else findNavController().navigate(R.id.action_flashcardLearnFragment2_to_calendarFragment)
         }
     }
 

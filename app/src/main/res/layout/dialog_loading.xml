@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:scaleX="0.25"
-        android:scaleY="0.25"
+        android:scaleX="0.2"
+        android:scaleY="0.2"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/animation_loading" />

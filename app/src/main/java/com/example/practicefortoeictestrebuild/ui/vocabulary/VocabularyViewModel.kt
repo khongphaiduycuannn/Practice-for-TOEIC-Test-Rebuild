@@ -145,10 +145,65 @@ class VocabularyViewModel : BaseViewModel() {
         return DataResult.Success(allCard)
     }
 
+    private suspend fun _getFlashcardDaily(): DataResult<MutableList<FlashCard>> {
+        val apiService = ApiHelper.getInstance().create(ApiService::class.java)
+
+        val allCard = mutableListOf<FlashCard>()
+        val newCard = mutableListOf<FlashCard>()
+        val memorizedCard = mutableListOf<FlashCard>()
+        val unmemorizedCard = mutableListOf<FlashCard>()
+
+        val x = suspendCoroutine { continuation ->
+            apiService.getFlashcardDaily(
+                MyApplication.getToken(),
+            ).enqueue(object : Callback<ApiResponse<MutableList<FlashCard>>> {
+                override fun onResponse(
+                    call: Call<ApiResponse<MutableList<FlashCard>>>,
+                    response: Response<ApiResponse<MutableList<FlashCard>>>
+                ) {
+                    if (response.isSuccessful && response.body()?.data != null) {
+                        _topicName.value = "Flashcard Daily"
+                        val list = response.body()?.data!!
+                        list.forEach {
+                            allCard.add(it)
+                        }
+                        continuation.resume(1)
+                    } else continuation.resume(0)
+                }
+
+                override fun onFailure(
+                    call: Call<ApiResponse<MutableList<FlashCard>>>,
+                    t: Throwable
+                ) {
+                    continuation.resume(0)
+                }
+            })
+        }
+
+        _allCard.value = allCard
+        _newCard.value = newCard
+        _memorizedCard.value = memorizedCard
+        _unmemorizedCard.value = unmemorizedCard
+        return DataResult.Success(allCard)
+    }
+
     fun getData() {
         executeTask(
             request = {
                 getFlashCard()
+            },
+            onSuccess = {
+                _listCard.value = it
+            },
+            onError = {
+            }
+        )
+    }
+
+    fun getFlashcardDaily() {
+        executeTask(
+            request = {
+                _getFlashcardDaily()
             },
             onSuccess = {
                 _listCard.value = it
@@ -173,6 +228,10 @@ class VocabularyViewModel : BaseViewModel() {
 
                 }
             })
+    }
+
+    fun setTopicName(name: String) {
+        _topicName.value = name
     }
 
     fun setListCard(selectedCategory: String?) {

@@ -4,11 +4,13 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.practicefortoeictestrebuild.R
 import com.example.practicefortoeictestrebuild.adapter.DayViewContainer
 import com.example.practicefortoeictestrebuild.adapter.MonthViewContainer
 import com.example.practicefortoeictestrebuild.base.BaseFragment
 import com.example.practicefortoeictestrebuild.databinding.FragmentCalendarBinding
+import com.example.practicefortoeictestrebuild.ui.vocabulary.VocabularyViewModel
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
@@ -29,6 +31,12 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(FragmentCalendarB
         }
     }
 
+    private val vocabularyViewModel by lazy {
+        activity?.let {
+            ViewModelProvider(it)[VocabularyViewModel::class.java]
+        }
+    }
+
     private val calendarView by lazy { binding.calendarView }
 
     private val countQuestionsDaily: MutableMap<Int, Int> = mutableMapOf()
@@ -37,9 +45,34 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(FragmentCalendarB
 
     override fun initData() {
         viewModel?.getDailyQuestionCard()
+        vocabularyViewModel?.getFlashcardDaily()
     }
 
     override fun handleEvent() {
+        bindCalendar()
+
+        binding.btnLearnFlashcard.setOnClickListener {
+            findNavController().navigate(R.id.action_calendarFragment_to_flashcardLearnFragment2)
+        }
+    }
+
+    override fun bindData() {
+        viewModel?.listQuestionCardDaily?.observe(viewLifecycleOwner) { list ->
+            list.forEach {
+                countQuestionsDaily[it.day] = it.cards.size
+            }
+            bindDay()
+        }
+
+        vocabularyViewModel?.listCard?.observe(viewLifecycleOwner) {
+            if (it.size > 0) {
+                binding.txtTotalFlashcard.text = "You need to learn ${it.size} flashcards to day"
+                binding.btnLearnFlashcard.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun bindCalendar() {
         val currentMonth = YearMonth.now()
         val startMonth = currentMonth.minusMonths(100)
         val endMonth = currentMonth.plusMonths(100)
@@ -50,15 +83,6 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(FragmentCalendarB
         calendarView.setup(startMonth, endMonth, daysOfWeek.first())
         calendarView.scrollToMonth(currentMonth)
         calendarView.setOnTouchListener { _, _ -> true }
-    }
-
-    override fun bindData() {
-        viewModel?.listQuestionCardDaily?.observe(viewLifecycleOwner) { list ->
-            list.forEach {
-                countQuestionsDaily[it.day] = it.cards.size
-            }
-            bindDay()
-        }
     }
 
     private fun bindDay() {
@@ -100,8 +124,7 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(FragmentCalendarB
                     container.dayTitlesContainer.children.map { it as TextView }
                         .forEachIndexed { index, textView ->
                             val dayOfWeek = daysOfWeek[index]
-                            val title =
-                                dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+                            val title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
                             textView.text = title
                         }
                 }

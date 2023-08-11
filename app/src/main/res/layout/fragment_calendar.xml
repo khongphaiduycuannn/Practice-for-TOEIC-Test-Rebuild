@@ -26,4 +26,31 @@
         android:layout_marginTop="5dp"
         app:cv_dayViewResource="@layout/item_day_layout"
         app:cv_monthHeaderResource="@layout/item_calendar_day_titles_container" />
+
+    <TextView
+        android:id="@+id/txt_total_flashcard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="25dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="You don't have any flashcard to learn to day!"
+        android:textAlignment="center"
+        android:textColor="#8BDBD9"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_learn_flashcard"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_button_next_practice"
+        android:text="Learn now"
+        android:textColor="#EFEFEF"
+        android:textStyle="bold"
+        android:visibility="gone" />
 </LinearLayout>

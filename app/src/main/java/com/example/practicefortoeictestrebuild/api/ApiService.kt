@@ -52,6 +52,11 @@ interface ApiService {
         @Path("topicId") topicId: String?
     ): Call<ApiResponse<TopicVocabulary>>
 
+    @GET("/api/v1/progress/cards/daily")
+    fun getFlashcardDaily(
+        @Header("Authorization") authorization: String?,
+    ): Call<ApiResponse<MutableList<FlashCard>>>
+
     @GET("/api/v1/progress/cards/review")
     fun getProgressCardIdReview(
         @Header("Authorization") authorization: String?,
