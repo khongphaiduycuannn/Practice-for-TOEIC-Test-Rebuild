@@ -24,6 +24,10 @@ class FlashcardStartFragment :
 
     private val loadingDialog by lazy { context?.let { Dialog(it) } }
 
+    private var category = "Default"
+
+    private var learn = "All"
+
     override fun onStart() {
         super.onStart()
         initDropdownMenu()
@@ -47,8 +51,13 @@ class FlashcardStartFragment :
         }
 
         binding.dropTextCategory.setOnItemClickListener { parent, _, position, _ ->
-            val item = parent.getItemAtPosition(position).toString()
-            viewModel?.setListCard(item)
+            category = parent.getItemAtPosition(position).toString()
+            viewModel?.setListCard(category, learn)
+        }
+
+        binding.dropTextLearn.setOnItemClickListener { parent, _, position, _ ->
+            learn = parent.getItemAtPosition(position).toString()
+            viewModel?.setListCard(category, learn)
         }
     }
 

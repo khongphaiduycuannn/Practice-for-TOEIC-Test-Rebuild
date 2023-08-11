@@ -8,6 +8,8 @@
     <string-array name="vocabulary_learn">
         <item>All</item>
         <item>10 cards</item>
+        <item>20 cards</item>
+        <item>50 cards</item>
     </string-array>
     <string-array name="vocabulary_category">
         <item>Default</item>

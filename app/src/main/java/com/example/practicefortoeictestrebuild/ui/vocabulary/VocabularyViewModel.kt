@@ -15,6 +15,7 @@ import com.example.practicefortoeictestrebuild.model.TopicVocabulary
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Math.min
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -269,12 +270,22 @@ class VocabularyViewModel : BaseViewModel() {
         _topicName.value = name
     }
 
-    fun setListCard(selectedCategory: String?) {
+    fun setListCard(selectedCategory: String?, cardLearn: String?) {
         when (selectedCategory) {
             "Default" -> _listCard.value = _allCard.value
             "New" -> _listCard.value = _newCard.value
             "Memorized" -> _listCard.value = _memorizedCard.value
             "Unmemorized" -> _listCard.value = _unmemorizedCard.value
+        }
+
+        if (_listCard.value != null) {
+            val size = _listCard.value!!.size
+            when (cardLearn) {
+                "All" -> _listCard.value = _listCard.value
+                "10 cards" -> _listCard.value = _listCard.value!!.subList(0, size.coerceAtMost(10))
+                "20 cards" -> _listCard.value = _listCard.value!!.subList(0, size.coerceAtMost(20))
+                "50 cards" -> _listCard.value = _listCard.value!!.subList(0, size.coerceAtMost(50))
+            }
         }
     }
 
