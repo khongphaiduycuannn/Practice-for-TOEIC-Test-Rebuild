@@ -135,6 +135,10 @@ class FlashcardGameFragment :
             internetDialog.dismiss()
             viewModel?.resetListQuestions()
         }
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun bindData() {

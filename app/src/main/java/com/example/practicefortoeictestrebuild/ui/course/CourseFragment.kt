@@ -28,6 +28,10 @@ class CourseFragment : BaseFragment<FragmentCourseBinding>(FragmentCourseBinding
 
     override fun handleEvent() {
         binding.listCourse.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.toolbar.setNavigationOnClickListener {
+            requireActivity().finish()
+        }
     }
 
     override fun bindData() {
@@ -48,6 +52,7 @@ class CourseFragment : BaseFragment<FragmentCourseBinding>(FragmentCourseBinding
             binding.listCourse.adapter = courseAdapter
         }
     }
+
     override fun onResume() {
         super.onResume()
         viewModel?.getData()

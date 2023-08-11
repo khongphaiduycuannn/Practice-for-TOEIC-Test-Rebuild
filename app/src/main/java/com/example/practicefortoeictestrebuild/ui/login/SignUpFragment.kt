@@ -43,6 +43,10 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
         binding.btnLogin.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun bindData() {
@@ -71,9 +75,9 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             ) {
                 if (response.isSuccessful) {
                     findNavController().popBackStack()
-                    Toast.makeText(requireActivity(), "Registration Successful", Toast.LENGTH_LONG).show()
-                }
-                else {
+                    Toast.makeText(requireActivity(), "Registration Successful", Toast.LENGTH_LONG)
+                        .show()
+                } else {
                     val jsonObject = JSONObject(response.errorBody()!!.string())
                     popUpNotification.message.text = jsonObject.getString("message")
                     popUpNotification.show(requireView())

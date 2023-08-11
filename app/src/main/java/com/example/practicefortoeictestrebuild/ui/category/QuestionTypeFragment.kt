@@ -143,6 +143,10 @@ class QuestionTypeFragment :
             enableChoiceButton(false)
         }
 
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
         dialogBinding.btnRetry.setOnClickListener {
             internetDialog.dismiss()
             if (index >= viewModel?.questions?.value!!.size) viewModel?.getQuestion(

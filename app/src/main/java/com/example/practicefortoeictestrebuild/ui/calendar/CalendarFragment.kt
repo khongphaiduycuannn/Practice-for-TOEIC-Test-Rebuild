@@ -54,6 +54,10 @@ class CalendarFragment : BaseFragment<FragmentCalendarBinding>(FragmentCalendarB
         binding.btnLearnFlashcard.setOnClickListener {
             findNavController().navigate(R.id.action_calendarFragment_to_flashcardLearnFragment2)
         }
+
+        binding.toolbar.setNavigationOnClickListener {
+            requireActivity().finish()
+        }
     }
 
     override fun bindData() {

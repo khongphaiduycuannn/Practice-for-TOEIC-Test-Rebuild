@@ -93,6 +93,12 @@ class FlashcardLearnFragment :
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
+        binding.toolbar.setNavigationOnClickListener {
+            if (viewModel?.topicName?.value != "Flashcard Daily")
+                findNavController().popBackStack()
+            else findNavController().navigate(R.id.action_flashcardLearnFragment2_to_calendarFragment)
+        }
+
         binding.cardThird.btnNextTopic.setOnClickListener {
             if (viewModel?.topicName?.value != "Flashcard Daily")
                 findNavController().popBackStack()

@@ -138,6 +138,10 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
             chooseAnswer("D")
         }
 
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
         dialogBinding.btnRetry.setOnClickListener {
             internetDialog.dismiss()
             if (index >= testResultViewModel?.questions?.value!!.size)

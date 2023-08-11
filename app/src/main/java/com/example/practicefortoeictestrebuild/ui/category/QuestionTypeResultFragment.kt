@@ -41,6 +41,10 @@ class QuestionTypeResultFragment :
         binding.btnNextPractice.setOnClickListener {
             requireActivity().finish()
         }
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun bindData() {

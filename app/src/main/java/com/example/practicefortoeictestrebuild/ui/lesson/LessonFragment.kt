@@ -2,6 +2,7 @@ package com.example.practicefortoeictestrebuild.ui.lesson
 
 import android.app.Dialog
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.practicefortoeictestrebuild.adapter.DocumentAdapter
 import com.example.practicefortoeictestrebuild.base.BaseFragment
@@ -34,6 +35,10 @@ class LessonFragment : BaseFragment<FragmentLessonBinding>(FragmentLessonBinding
 
     override fun handleEvent() {
         binding.listDocument.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun bindData() {

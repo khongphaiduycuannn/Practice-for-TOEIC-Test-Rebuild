@@ -57,6 +57,10 @@ class RealTestResultFragment :
         binding.btnNextPractice.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun bindData() {

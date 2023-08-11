@@ -50,6 +50,10 @@ class TestResultFragment :
             viewModel?.indexPlusOne()
             findNavController().popBackStack()
         }
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun bindData() {

@@ -59,6 +59,10 @@ class FlashcardStartFragment :
             learn = parent.getItemAtPosition(position).toString()
             viewModel?.setListCard(category, learn)
         }
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun bindData() {
