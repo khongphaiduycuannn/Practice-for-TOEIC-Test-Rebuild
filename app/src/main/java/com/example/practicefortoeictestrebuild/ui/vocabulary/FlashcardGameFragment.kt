@@ -142,12 +142,12 @@ class FlashcardGameFragment :
     }
 
     override fun bindData() {
+        binding.seekBar.isEnabled = false
+        setSeekbar()
+
         viewModel?.topicName?.observe(viewLifecycleOwner) {
             binding.toolbar.title = it
         }
-
-        binding.seekBar.isEnabled = false
-        setSeekbar()
 
         viewModel?.questions?.observe(viewLifecycleOwner) {
             if (index < viewModel?.questions?.value!!.size) {

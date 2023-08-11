@@ -12,7 +12,7 @@ class QuestionTypeActivity :
     }
 
     override fun initData() {
-        viewModel?.getData()
+        viewModel.getData()
     }
 
     override fun handleEvent() {

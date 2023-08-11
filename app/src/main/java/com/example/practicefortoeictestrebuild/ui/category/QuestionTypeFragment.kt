@@ -144,7 +144,7 @@ class QuestionTypeFragment :
         }
 
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            requireActivity().finish()
         }
 
         dialogBinding.btnRetry.setOnClickListener {
@@ -237,14 +237,24 @@ class QuestionTypeFragment :
         enableChoiceButton(true)
         fillBlankAnswer()
 
-        val image = card.children[0].question.image
-        val sound = card.children[0].question.sound
-        val hint = card.children[0].question.hint
-        val content = card.children[0].question.content
+        val image = card.image
+        val sound = card.sound
+        val content = card.content
         val userChoice = card.userChoice
-        var correct = card.children[0].answer.answer[0].toString()
-        if (correct != "A" && correct != "B" && correct != "C" && correct != "D") correct =
-            card.children[0].answer.answer[1].toString()
+        var correct = card.correct
+        val choices = card.choices
+
+        if (correct == choices[0])
+            correct = "A"
+        if (correct == choices[1])
+            correct = "B"
+        if (correct == choices[2])
+            correct = "C"
+        if (correct == choices[3])
+            correct = "D"
+
+        binding.questionCard.result.txtTitleExplanation.visibility = View.GONE
+        binding.questionCard.result.txtExplanation.visibility = View.GONE
 
         if (image.isNullOrEmpty()) setViewHeight(binding.questionCard.imgImage, 0)
         else {
@@ -266,14 +276,12 @@ class QuestionTypeFragment :
         }
 
         binding.questionCard.txtContent.text = content
-        binding.questionCard.result.txtExplanation.text = hint
 
-        val choice = card.children[0].answer.choices
         val answer = binding.questionCard.answer
-        answer.txtAAnswer.text = choice[0]
-        if (choice.size > 1) answer.txtBAnswer.text = choice[1]
-        if (choice.size > 2) answer.txtCAnswer.text = choice[2]
-        if (choice.size > 3) answer.txtDAnswer.text = choice[3]
+        answer.txtAAnswer.text = choices[0]
+        if (choices.size > 1) answer.txtBAnswer.text = choices[1]
+        if (choices.size > 2) answer.txtCAnswer.text = choices[2]
+        if (choices.size > 3) answer.txtDAnswer.text = choices[3]
     }
 
     private fun fillImage(link: String) {
@@ -369,9 +377,17 @@ class QuestionTypeFragment :
 
     private fun chooseAnswer(choice: String) {
         val card = viewModel?.questions?.value!![index]
-        var correct = card.children[0].answer.answer[0].toString()
-        if (correct != "A" && correct != "B" && correct != "C" && correct != "D") correct =
-            card.children[0].answer.answer[1].toString()
+        val choices = card.choices
+        var correct = card.correct
+
+        if (correct == choices[0])
+            correct = "A"
+        if (correct == choices[1])
+            correct = "B"
+        if (correct == choices[2])
+            correct = "C"
+        if (correct == choices[3])
+            correct = "D"
 
         when (choice) {
             "A" -> card.userChoice = 1

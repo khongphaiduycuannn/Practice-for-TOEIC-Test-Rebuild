@@ -8,6 +8,7 @@ import com.example.practicefortoeictestrebuild.databinding.FragmentRealTestResul
 import com.example.practicefortoeictestrebuild.ui.test.TestResultViewModel
 import com.example.practicefortoeictestrebuild.ui.test.TestViewModel
 import java.time.Duration
+import java.time.LocalDateTime
 
 class RealTestResultFragment :
     BaseFragment<FragmentRealTestResultBinding>(FragmentRealTestResultBinding::inflate) {
@@ -34,22 +35,22 @@ class RealTestResultFragment :
 
     private var countCorrectQuestion = 0
 
-    private var countWrongQuestion = 0
+    private var countIncorrectQuestion = 0
 
     override fun initData() {
-
+        testResultViewModel?.endTime = LocalDateTime.now()
     }
 
     override fun handleEvent() {
         binding.testDetailCard.btnReview.setOnClickListener {
             realTestViewModel?.status = "review"
-            testResultViewModel?.resetListQuestions()
+            testViewModel?.resetListQuestions()
             findNavController().navigate(R.id.action_realTestResultFragment_to_realTestFragment)
         }
 
         binding.testDetailCard.btnReplay.setOnClickListener {
             realTestViewModel?.status = "do-test"
-            testResultViewModel?.clearQuestions()
+            testViewModel?.clearQuestions()
             testViewModel?.clearCorrect()
             findNavController().navigate(R.id.action_realTestResultFragment_to_realTestFragment)
         }
@@ -69,28 +70,22 @@ class RealTestResultFragment :
         val duration = Duration.between(startTime, endTime)
         binding.testDetailCard.txtCountTotalTime.text = "${formattedTime(duration)}"
 
-        testViewModel?.allQuestion?.observe(viewLifecycleOwner) {
+        testViewModel?.questions?.observe(viewLifecycleOwner) {
             countAllQuestion = it.size
             binding.testDetailCard.txtCountTotalQuestion.text = "${it.size}"
+            bindProgress()
         }
 
         testViewModel?.correctQuestion?.observe(viewLifecycleOwner) {
             countCorrectQuestion = it.size
             binding.testDetailCard.txtCountCorrect.text = "${it.size}"
-
-            if (countAllQuestion > 0) {
-                val progress: Int = (100.0 * it.size / countAllQuestion).toInt()
-                binding.testDetailCard.txtProgress.text = "$progress%"
-            }
+            bindProgress()
         }
 
-        testViewModel?.wrongQuestion?.observe(viewLifecycleOwner) {
+        testViewModel?.incorrectQuestion?.observe(viewLifecycleOwner) {
             binding.testDetailCard.txtCountIncorrect.text = "${it.size}"
-
-            if (countAllQuestion > 0) {
-                val progress: Int = (100.0 * countCorrectQuestion / countAllQuestion).toInt()
-                binding.testDetailCard.txtProgress.text = "$progress%"
-            }
+            countIncorrectQuestion = it.size
+            bindProgress()
         }
     }
 
@@ -107,5 +102,12 @@ class RealTestResultFragment :
         if (hours == "00")
             return "$minutes:$seconds"
         return "$hours:$minutes:$seconds"
+    }
+
+    private fun bindProgress() {
+        if (countAllQuestion > 0) {
+            val progress: Int = (100.0 * countCorrectQuestion / countAllQuestion).toInt()
+            binding.testDetailCard.txtProgress.text = "$progress%"
+        }
     }
 }

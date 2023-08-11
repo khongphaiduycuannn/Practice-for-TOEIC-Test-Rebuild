@@ -8,5 +8,5 @@ data class TopicTest(
     @SerializedName("name")
     val name: String,
     @SerializedName("cards")
-    val cards: MutableList<DataOverview>
+    val cards: MutableList<QuestionCard>
 )

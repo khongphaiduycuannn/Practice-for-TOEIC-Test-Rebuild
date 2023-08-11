@@ -9,6 +9,7 @@ import com.example.practicefortoeictestrebuild.api.ApiService
 import com.example.practicefortoeictestrebuild.base.BaseViewModel
 import com.example.practicefortoeictestrebuild.base.DataResult
 import com.example.practicefortoeictestrebuild.model.DataOverview
+import com.example.practicefortoeictestrebuild.model.QuestionCard
 import com.example.practicefortoeictestrebuild.model.TopicTest
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +27,7 @@ class TestViewModel : BaseViewModel() {
         value = mutableListOf()
     }
 
-    private val _allQuestion = MutableLiveData<MutableList<String>>().apply {
+    private val _questions = MutableLiveData<MutableList<QuestionCard>>().apply {
         value = mutableListOf()
     }
 
@@ -34,7 +35,7 @@ class TestViewModel : BaseViewModel() {
         value = mutableListOf()
     }
 
-    private val _wrongQuestion = MutableLiveData<MutableList<String>>().apply {
+    private val _incorrectQuestion = MutableLiveData<MutableList<String>>().apply {
         value = mutableListOf()
     }
 
@@ -42,11 +43,11 @@ class TestViewModel : BaseViewModel() {
 
     val topicIds: LiveData<MutableList<String>> get() = _topicIds
 
-    val allQuestion: LiveData<MutableList<String>> get() = _allQuestion
+    val questions: LiveData<MutableList<QuestionCard>> get() = _questions
 
     val correctQuestion: LiveData<MutableList<String>> get() = _correctQuestion
 
-    val wrongQuestion: LiveData<MutableList<String>> get() = _wrongQuestion
+    val incorrectQuestion: LiveData<MutableList<String>> get() = _incorrectQuestion
 
     val index = MutableLiveData<Int>().apply { value = 0 }
 
@@ -54,45 +55,41 @@ class TestViewModel : BaseViewModel() {
         _topicIds.value = list
     }
 
-    private suspend fun getQuestionWithoutProgress(): DataResult<Boolean> {
+    private suspend fun getListQuestions(): DataResult<Boolean> {
         val apiService = ApiHelper.getInstance().create(ApiService::class.java)
 
-        val allQuestion = mutableListOf<String>()
+        var questions = mutableListOf<QuestionCard>()
         val y = suspendCoroutine { continuation ->
             apiService.getTopic(
                 MyApplication.getToken(),
-                index.value?.let { _topicIds.value?.get(it) })
-                .enqueue(object : Callback<ApiResponse<TopicTest>> {
-                    override fun onResponse(
-                        call: Call<ApiResponse<TopicTest>>,
-                        response: Response<ApiResponse<TopicTest>>
-                    ) {
-                        if (response.isSuccessful && response.body()?.data != null) {
-                            _topicName.value = response.body()?.data!!.name
-                            response.body()?.data!!.cards.forEach {
-                                allQuestion.add(it.id)
-                            }
-                            continuation.resume(1)
-                        } else continuation.resume(0)
-                    }
+                _topicIds.value?.get(index.value!!)
+            ).enqueue(object : Callback<ApiResponse<TopicTest>> {
+                override fun onResponse(
+                    call: Call<ApiResponse<TopicTest>>,
+                    response: Response<ApiResponse<TopicTest>>
+                ) {
+                    if (response.isSuccessful && response.body()?.data != null) {
+                        _topicName.value = response.body()?.data!!.name
+                        questions = response.body()?.data!!.cards
+                        continuation.resume(1)
+                    } else continuation.resume(0)
+                }
 
-                    override fun onFailure(call: Call<ApiResponse<TopicTest>>, t: Throwable) {
-                        continuation.resume(0)
-                    }
-                })
+                override fun onFailure(call: Call<ApiResponse<TopicTest>>, t: Throwable) {
+                    continuation.resume(0)
+                }
+            })
         }
-        _allQuestion.value = allQuestion
+        _questions.value = questions
         return DataResult.Success(true)
     }
 
-    private suspend fun getQuestion(): DataResult<Boolean> {
-        val apiService = ApiHelper.getInstance().create(ApiService::class.java)
-
-        val allQuestion = mutableListOf<String>()
+    private suspend fun getProgress(): DataResult<Boolean> {
         val correctQuestion = mutableListOf<String>()
-        val wrongQuestion = mutableListOf<String>()
+        val incorrectQuestion = mutableListOf<String>()
 
         val x = suspendCoroutine { continuation ->
+            val apiService = ApiHelper.getInstance().create(ApiService::class.java)
             apiService.getProgressCard(MyApplication.getToken(),
                 index.value?.let { _topicIds.value?.get(it) })
                 .enqueue(object : Callback<ApiResponse<MutableList<DataOverview>>> {
@@ -103,7 +100,7 @@ class TestViewModel : BaseViewModel() {
                         if (response.isSuccessful && response.body()?.data != null) {
                             val list = response.body()?.data
                             list?.forEach {
-                                if (it.status == 1) wrongQuestion.add(it.cardId)
+                                if (it.status == 1) incorrectQuestion.add(it.cardId)
                                 else correctQuestion.add(it.cardId)
                             }
                             continuation.resume(1)
@@ -119,33 +116,14 @@ class TestViewModel : BaseViewModel() {
                 })
         }
 
-        val y = suspendCoroutine { continuation ->
-            apiService.getTopic(
-                MyApplication.getToken(),
-                index.value?.let { _topicIds.value?.get(it) })
-                .enqueue(object : Callback<ApiResponse<TopicTest>> {
-                    override fun onResponse(
-                        call: Call<ApiResponse<TopicTest>>,
-                        response: Response<ApiResponse<TopicTest>>
-                    ) {
-                        if (response.isSuccessful && response.body()?.data != null) {
-                            _topicName.value = response.body()?.data!!.name
-                            response.body()?.data!!.cards.forEach {
-                                allQuestion.add(it.id)
-                            }
-                            continuation.resume(1)
-                        } else continuation.resume(0)
-                    }
-
-                    override fun onFailure(call: Call<ApiResponse<TopicTest>>, t: Throwable) {
-                        continuation.resume(0)
-                    }
-                })
-        }
-        _allQuestion.value = allQuestion
         _correctQuestion.value = correctQuestion
-        _wrongQuestion.value = wrongQuestion
+        _incorrectQuestion.value = incorrectQuestion
+        return DataResult.Success(true)
+    }
 
+    private suspend fun getQuestion(): DataResult<Boolean> {
+        getProgress()
+        getListQuestions()
         return DataResult.Success(true)
     }
 
@@ -165,7 +143,7 @@ class TestViewModel : BaseViewModel() {
     fun getDataWithOutProgress() {
         executeTask(
             request = {
-                getQuestionWithoutProgress()
+                getListQuestions()
             },
             onSuccess = {
 
@@ -177,13 +155,13 @@ class TestViewModel : BaseViewModel() {
 
     fun removeCorrectCard(id: String) {
         _correctQuestion.value?.remove(id)
-        if (_wrongQuestion.value?.contains(id) == false) {
-            _wrongQuestion.value?.add(id)
+        if (_incorrectQuestion.value?.contains(id) == false) {
+            _incorrectQuestion.value?.add(id)
         }
     }
 
     fun removeWrongCard(id: String) {
-        _wrongQuestion.value?.remove(id)
+        _incorrectQuestion.value?.remove(id)
         if (_correctQuestion.value?.contains(id) == false) {
             _correctQuestion.value?.add(id)
         }
@@ -195,6 +173,16 @@ class TestViewModel : BaseViewModel() {
 
     fun clearCorrect() {
         _correctQuestion.value = mutableListOf()
-        _wrongQuestion.value = mutableListOf()
+        _incorrectQuestion.value = mutableListOf()
+    }
+
+    fun resetListQuestions() {
+        _questions.value = _questions.value
+    }
+
+    fun clearQuestions() {
+        _questions.value?.forEach {
+            it.userChoice = 0
+        }
     }
 }

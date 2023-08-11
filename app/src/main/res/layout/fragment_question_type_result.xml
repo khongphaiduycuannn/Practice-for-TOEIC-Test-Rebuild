@@ -58,7 +58,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/bg_button_next_practice"
+                android:background="@drawable/bg_button_practice"
                 android:text="NEXT CATEGORY"
                 android:textColor="#EFEFEF"
                 android:textStyle="bold" />

@@ -71,7 +71,7 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
     override fun handleEvent() {
         startCountdown(2 * 60 * 60)
         clearCard()
-        testResultViewModel?.resetListQuestions()
+        testViewModel?.resetListQuestions()
 
         binding.questionCard.result.btnContinue.setOnClickListener {
             nextQuestion()
@@ -82,7 +82,6 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
         }
 
         binding.questionCard.btnSubmit.setOnClickListener {
-            testResultViewModel?.endTime = LocalDateTime.now()
             findNavController().navigate(R.id.action_realTestFragment_to_realTestResultFragment)
         }
 
@@ -144,9 +143,7 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
 
         dialogBinding.btnRetry.setOnClickListener {
             internetDialog.dismiss()
-            if (index >= testResultViewModel?.questions?.value!!.size)
-                testResultViewModel?.getQuestion(index, internetDialog)
-            else testResultViewModel?.resetListQuestions()
+            testViewModel?.resetListQuestions()
         }
     }
 
@@ -159,25 +156,16 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
             }
         }
 
-        testResultViewModel?.questions?.observe(viewLifecycleOwner) {
-            if (index < testResultViewModel?.questions?.value!!.size) {
+        testViewModel?.questions?.observe(viewLifecycleOwner) {
+            if (index < testViewModel?.questions?.value!!.size) {
                 fillCardData(it[index])
                 fillCardSize()
-                binding.txtProgress.text = "${index + 1}/${testResultViewModel?.getListSize()}"
+                binding.txtProgress.text = "${index + 1}/${it.size}"
             }
         }
 
         testViewModel?.topicName?.observe(viewLifecycleOwner) {
             binding.toolbar.title = it
-        }
-
-        testViewModel?.allQuestion?.observe(viewLifecycleOwner) {
-            if (it.size > 0) {
-                testResultViewModel?.setListIds(it)
-                if (index >= testResultViewModel?.questions?.value!!.size)
-                    testResultViewModel?.getQuestion(index, internetDialog)
-                else testResultViewModel?.resetListQuestions()
-            }
         }
     }
 
@@ -200,19 +188,15 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
     private fun nextQuestion() {
         destroyCurrentCard()
         index++
-        if (index < testResultViewModel?.getListSize()!!) {
-            if (index < testResultViewModel?.questions?.value!!.size) {
-                testResultViewModel?.resetListQuestions()
-            } else {
-                testResultViewModel?.getQuestion(index, internetDialog)
-            }
+        val size = testViewModel?.questions?.value!!.size
+        if (index < size) {
+            testViewModel?.resetListQuestions()
             clearCard()
         } else {
-            testResultViewModel?.endTime = LocalDateTime.now()
-            findNavController().navigate(R.id.action_realTestFragment_to_realTestResultFragment)
+            findNavController().navigate(R.id.action_testFragment_to_testResultFragment)
         }
-        index = index.coerceAtMost(testResultViewModel?.getListSize()!! - 1)
-        testResultViewModel?.resetListQuestions()
+        index = index.coerceAtMost(size - 1)
+        testViewModel?.resetListQuestions()
     }
 
     private fun startCountdown(maxTime: Int) {
@@ -228,7 +212,6 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
 
                 delay(1_000)
             }
-            testResultViewModel?.endTime = LocalDateTime.now()
             findNavController().navigate(R.id.action_realTestFragment_to_realTestResultFragment)
         }
 
@@ -282,14 +265,24 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
         enableChoiceButton(true)
         fillBlankAnswer()
 
-        val image = card.children[0].question.image
-        val sound = card.children[0].question.sound
-        val hint = card.children[0].question.hint
-        val content = card.children[0].question.content
+        val image = card.image
+        val sound = card.sound
+        val content = card.content
         val userChoice = card.userChoice
-        var correct = card.children[0].answer.answer[0].toString()
-        if (correct != "A" && correct != "B" && correct != "C" && correct != "D")
-            correct = card.children[0].answer.answer[1].toString()
+        var correct = card.correct
+        val choices = card.choices
+
+        if (correct == choices[0])
+            correct = "A"
+        if (correct == choices[1])
+            correct = "B"
+        if (correct == choices[2])
+            correct = "C"
+        if (correct == choices[3])
+            correct = "D"
+
+        binding.questionCard.result.txtTitleExplanation.visibility = View.GONE
+        binding.questionCard.result.txtExplanation.visibility = View.GONE
 
         if (image.isNullOrEmpty())
             setViewHeight(binding.questionCard.imgImage, 0)
@@ -316,17 +309,14 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
         }
 
         binding.questionCard.txtContent.text = content
-        binding.questionCard.result.txtExplanation.text = hint
-
-        val choice = card.children[0].answer.choices
         val answer = binding.questionCard.answer
-        answer.txtAAnswer.text = choice[0]
-        if (choice.size > 1)
-            answer.txtBAnswer.text = choice[1]
-        if (choice.size > 2)
-            answer.txtCAnswer.text = choice[2]
-        if (choice.size > 3)
-            answer.txtDAnswer.text = choice[3]
+        answer.txtAAnswer.text = choices[0]
+        if (choices.size > 1)
+            answer.txtBAnswer.text = choices[1]
+        if (choices.size > 2)
+            answer.txtCAnswer.text = choices[2]
+        if (choices.size > 3)
+            answer.txtDAnswer.text = choices[3]
     }
 
     private fun fillImage(link: String) {
@@ -417,10 +407,18 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
     }
 
     private fun chooseAnswer(choice: String) {
-        val card = testResultViewModel?.questions?.value!![index]
-        var correct = card.children[0].answer.answer[0].toString()
-        if (correct != "A" && correct != "B" && correct != "C" && correct != "D")
-            correct = card.children[0].answer.answer[1].toString()
+        val card = testViewModel?.questions?.value!![index]
+        val choices = card.choices
+        var correct = card.correct
+
+        if (correct == choices[0])
+            correct = "A"
+        if (correct == choices[1])
+            correct = "B"
+        if (correct == choices[2])
+            correct = "C"
+        if (correct == choices[3])
+            correct = "D"
 
         when (choice) {
             "A" -> card.userChoice = 1

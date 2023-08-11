@@ -17,39 +17,9 @@ import java.time.LocalDateTime
 
 class TestResultViewModel : BaseViewModel() {
 
-    private var _questionIds = mutableListOf<String>()
-
-    private val _questions = MutableLiveData<MutableList<QuestionCard>>().apply {
-        value = mutableListOf()
-    }
-
-    val questions: LiveData<MutableList<QuestionCard>> get() = _questions
-
     var startTime: LocalDateTime? = null
 
     var endTime: LocalDateTime? = null
-
-    fun getQuestion(index: Int, dialog: Dialog) {
-        val apiService = ApiHelper.getInstance().create(ApiService::class.java)
-        apiService.getQuestion(MyApplication.getToken(), _questionIds[index])
-            .enqueue(object : Callback<ApiResponse<QuestionCard>> {
-                override fun onResponse(
-                    call: Call<ApiResponse<QuestionCard>>,
-                    response: Response<ApiResponse<QuestionCard>>
-                ) {
-                    if (response.isSuccessful && response.body()?.data != null) {
-                        val questionCard = response.body()?.data!!
-                        questionCard.userChoice = 0
-                        _questions.value?.add(questionCard)
-                        _questions.value = _questions.value
-                    }
-                }
-
-                override fun onFailure(call: Call<ApiResponse<QuestionCard>>, t: Throwable) {
-                    dialog.show()
-                }
-            })
-    }
 
     fun updateCard(cardId: String, answer: String) {
         updateStatusCard(cardId, answer)
@@ -93,21 +63,5 @@ class TestResultViewModel : BaseViewModel() {
 
                 }
             })
-    }
-
-    fun resetListQuestions() {
-        _questions.value = _questions.value
-    }
-
-    fun setListIds(questionIds: MutableList<String>) {
-        _questionIds = questionIds
-    }
-
-    fun getListSize(): Int {
-        return _questionIds.size
-    }
-
-    fun clearQuestions() {
-        _questions.value = mutableListOf()
     }
 }

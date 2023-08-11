@@ -30,13 +30,13 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
 
     private val viewModel by lazy {
         activity?.let {
-            ViewModelProvider(it)[TestResultViewModel::class.java]
+            ViewModelProvider(it)[TestViewModel::class.java]
         }
     }
 
-    private val testViewModel by lazy {
+    private val testResultViewModel by lazy {
         activity?.let {
-            ViewModelProvider(it)[TestViewModel::class.java]
+            ViewModelProvider(it)[TestResultViewModel::class.java]
         }
     }
 
@@ -51,25 +51,8 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
     private var targetHeight = 0
 
     override fun initData() {
-        internetDialog.setContentView(dialogBinding.root)
-        internetDialog.setCancelable(false)
-        internetDialog.window?.apply {
-            setLayout(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.WRAP_CONTENT
-            )
-            attributes.apply {
-                gravity = Gravity.CENTER
-            }
-            setDimAmount(0.5F)
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        }
-
-        if (index >= viewModel?.questions?.value!!.size)
-            viewModel?.getQuestion(index, internetDialog)
-        else viewModel?.resetListQuestions()
-
-        viewModel?.startTime = LocalDateTime.now()
+        initDialog()
+        testResultViewModel?.startTime = LocalDateTime.now()
     }
 
     override fun handleEvent() {
@@ -79,19 +62,15 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
         binding.questionCard.result.btnContinue.setOnClickListener {
             destroyCurrentCard()
             index++
-            if (index < viewModel?.getListSize()!!) {
-                if (index < viewModel?.questions?.value!!.size) {
-                    viewModel?.resetListQuestions()
-                } else {
-                    viewModel?.getQuestion(index, internetDialog)
-                }
+            val size = viewModel?.questions?.value!!.size
+            if (index < size) {
+                viewModel?.resetListQuestions()
                 setSeekbar()
                 clearCard()
             } else {
-                viewModel?.endTime = LocalDateTime.now()
                 findNavController().navigate(R.id.action_testFragment_to_testResultFragment)
             }
-            index = index.coerceAtMost(viewModel?.getListSize()!! - 1)
+            index = index.coerceAtMost(size - 1)
             viewModel?.resetListQuestions()
         }
 
@@ -157,9 +136,7 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
 
         dialogBinding.btnRetry.setOnClickListener {
             internetDialog.dismiss()
-            if (index >= viewModel?.questions?.value!!.size)
-                viewModel?.getQuestion(index, internetDialog)
-            else viewModel?.resetListQuestions()
+            viewModel?.resetListQuestions()
         }
     }
 
@@ -174,7 +151,7 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
             }
         }
 
-        testViewModel?.topicName?.observe(viewLifecycleOwner) {
+        viewModel?.topicName?.observe(viewLifecycleOwner) {
             binding.toolbar.title = it
         }
     }
@@ -182,6 +159,22 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
     override fun onDestroy() {
         destroyCurrentCard()
         super.onDestroy()
+    }
+
+    private fun initDialog() {
+        internetDialog.setContentView(dialogBinding.root)
+        internetDialog.setCancelable(false)
+        internetDialog.window?.apply {
+            setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
+            attributes.apply {
+                gravity = Gravity.CENTER
+            }
+            setDimAmount(0.5F)
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
     }
 
     private fun clearCard() {
@@ -212,8 +205,7 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
                     LayoutParams.MATCH_PARENT,
                     LayoutParams.MATCH_PARENT
                 )
-            }
-            else {
+            } else {
                 val animator = ValueAnimator.ofInt(0, targetHeight)
                 animator.addUpdateListener { valueAnimator ->
                     val value = valueAnimator.animatedValue as Int
@@ -234,14 +226,24 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
         enableChoiceButton(true)
         fillBlankAnswer()
 
-        val image = card.children[0].question.image
-        val sound = card.children[0].question.sound
-        val hint = card.children[0].question.hint
-        val content = card.children[0].question.content
+        val image = card.image
+        val sound = card.sound
+        val content = card.content
         val userChoice = card.userChoice
-        var correct = card.children[0].answer.answer[0].toString()
-        if (correct != "A" && correct != "B" && correct != "C" && correct != "D")
-            correct = card.children[0].answer.answer[1].toString()
+        var correct = card.correct
+        val choices = card.choices
+
+        if (correct == choices[0])
+            correct = "A"
+        if (correct == choices[1])
+            correct = "B"
+        if (correct == choices[2])
+            correct = "C"
+        if (correct == choices[3])
+            correct = "D"
+
+        binding.questionCard.result.txtTitleExplanation.visibility = View.GONE
+        binding.questionCard.result.txtExplanation.visibility = View.GONE
 
         if (image.isNullOrEmpty())
             setViewHeight(binding.questionCard.imgImage, 0)
@@ -266,17 +268,14 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
         }
 
         binding.questionCard.txtContent.text = content
-        binding.questionCard.result.txtExplanation.text = hint
-
-        val choice = card.children[0].answer.choices
         val answer = binding.questionCard.answer
-        answer.txtAAnswer.text = choice[0]
-        if (choice.size > 1)
-            answer.txtBAnswer.text = choice[1]
-        if (choice.size > 2)
-            answer.txtCAnswer.text = choice[2]
-        if (choice.size > 3)
-            answer.txtDAnswer.text = choice[3]
+        answer.txtAAnswer.text = choices[0]
+        if (choices.size > 1)
+            answer.txtBAnswer.text = choices[1]
+        if (choices.size > 2)
+            answer.txtCAnswer.text = choices[2]
+        if (choices.size > 3)
+            answer.txtDAnswer.text = choices[3]
     }
 
     private fun fillImage(link: String) {
@@ -326,8 +325,9 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
 
     private fun fillResult(flag: Boolean, correct: String) {
         val result = binding.questionCard.result
+        val card = viewModel?.questions?.value!![index].correct
 
-        result.txtAnswer.text = "Answer: $correct"
+        result.txtAnswer.text = "Answer: $card"
         if (flag) {
             result.imgImage.setImageResource(R.drawable.img_hehe)
             result.txtResult.text = "Correct"
@@ -350,9 +350,10 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
     }
 
     private fun setSeekbar() {
-        binding.seekBar.max = viewModel?.getListSize()!!
+        val size = viewModel?.questions?.value!!.size
+        binding.seekBar.max = size
         binding.seekBar.progress = index + 1
-        binding.txtProgress.text = "${index + 1}/${viewModel?.getListSize()}"
+        binding.txtProgress.text = "${index + 1}/${size}"
     }
 
     private fun setViewHeight(view: View, height: Int) {
@@ -370,9 +371,17 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
 
     private fun chooseAnswer(choice: String) {
         val card = viewModel?.questions?.value!![index]
-        var correct = card.children[0].answer.answer[0].toString()
-        if (correct != "A" && correct != "B" && correct != "C" && correct != "D")
-            correct = card.children[0].answer.answer[1].toString()
+        val choices = card.choices
+        var correct = card.correct
+
+        if (correct == choices[0])
+            correct = "A"
+        if (correct == choices[1])
+            correct = "B"
+        if (correct == choices[2])
+            correct = "C"
+        if (correct == choices[3])
+            correct = "D"
 
         when (choice) {
             "A" -> card.userChoice = 1
@@ -384,11 +393,11 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
         coloredAnswer(card.userChoice, correct)
 
         if (choice != correct) {
-            testViewModel?.removeCorrectCard(card.id)
-            viewModel?.updateCard(card.id, "false")
+            viewModel?.removeCorrectCard(card.id)
+            testResultViewModel?.updateCard(card.id, "false")
         } else {
-            testViewModel?.removeWrongCard(card.id)
-            viewModel?.updateCard(card.id, "true")
+            viewModel?.removeWrongCard(card.id)
+            testResultViewModel?.updateCard(card.id, "true")
         }
     }
 

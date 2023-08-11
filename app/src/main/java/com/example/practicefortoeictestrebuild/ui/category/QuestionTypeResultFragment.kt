@@ -43,7 +43,7 @@ class QuestionTypeResultFragment :
         }
 
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            requireActivity().finish()
         }
     }
 

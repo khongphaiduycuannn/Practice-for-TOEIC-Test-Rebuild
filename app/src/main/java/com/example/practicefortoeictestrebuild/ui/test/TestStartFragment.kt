@@ -42,15 +42,13 @@ class TestStartFragment :
         }
 
         binding.testProgressCard.btnPractice.setOnClickListener {
-            val listId = viewModel?.allQuestion?.value!!
+            val listId = viewModel?.questions?.value!!
             if (listId.size == 0) {
                 val popUpNotification = PopUpNotification(requireContext())
                 popUpNotification.title.text = "Notification"
                 popUpNotification.message.text = "This topic doesn't have any question!"
                 popUpNotification.show(requireView())
             } else {
-                testResultViewModel?.setListIds(listId)
-                testResultViewModel?.clearQuestions()
                 findNavController().navigate(R.id.action_testStartFragment_to_testFragment)
             }
         }
@@ -79,34 +77,22 @@ class TestStartFragment :
             }
         }
 
-        viewModel?.allQuestion?.observe(viewLifecycleOwner) {
+        viewModel?.questions?.observe(viewLifecycleOwner) {
             countAllQuestion = it.size
             binding.testResultBar.txtCountAll.text = "${it.size}"
+            bindProgress()
         }
 
         viewModel?.correctQuestion?.observe(viewLifecycleOwner) {
             countCorrectQuestion = it.size
             binding.testResultBar.txtCountCorrect.text = "${it.size}"
-
-            binding.testResultBar.txtCountNew.text =
-                "${countAllQuestion - countCorrectQuestion - countWrongQuestion}"
-
-            if (countAllQuestion > 0) {
-                val progress: Int = (100.0 * countCorrectQuestion / countAllQuestion).toInt()
-                binding.testProgressCard.txtProgress.text = "$progress%"
-            }
+            bindProgress()
         }
 
-        viewModel?.wrongQuestion?.observe(viewLifecycleOwner) {
+        viewModel?.incorrectQuestion?.observe(viewLifecycleOwner) {
             countWrongQuestion = it.size
             binding.testResultBar.txtCountIncorrect.text = "${it.size}"
-            binding.testResultBar.txtCountNew.text =
-                "${countAllQuestion - countCorrectQuestion - countWrongQuestion}"
-
-            if (countAllQuestion > 0) {
-                val progress: Int = (100.0 * countCorrectQuestion / countAllQuestion).toInt()
-                binding.testProgressCard.txtProgress.text = "$progress%"
-            }
+            bindProgress()
         }
 
         viewModel?.topicName?.observe(viewLifecycleOwner) {
@@ -117,5 +103,15 @@ class TestStartFragment :
     override fun onResume() {
         super.onResume()
         bindData()
+    }
+
+    private fun bindProgress() {
+        binding.testResultBar.txtCountNew.text =
+            "${countAllQuestion - countCorrectQuestion - countWrongQuestion}"
+
+        if (countAllQuestion > 0) {
+            val progress: Int = (100.0 * countCorrectQuestion / countAllQuestion).toInt()
+            binding.testProgressCard.txtProgress.text = "$progress%"
+        }
     }
 }
