@@ -26,6 +26,7 @@ import com.example.practicefortoeictestrebuild.model.AlarmScheduler
 import com.example.practicefortoeictestrebuild.model.User
 import com.example.practicefortoeictestrebuild.ui.calendar.CalendarActivity
 import com.example.practicefortoeictestrebuild.ui.login.LoginActivity
+import com.example.practicefortoeictestrebuild.ui.profile.ProfileActivity
 import com.example.practicefortoeictestrebuild.utils.startLoading
 import com.simform.custombottomnavigation.Model
 
@@ -177,6 +178,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                         alarmScheduler.schedule(AlarmItem(getString(R.string.app_name)))
                         btnSwitch?.isChecked = true
                     }
+                }
+                R.id.nav_profile -> {
+                    startActivity(Intent(this, ProfileActivity::class.java))
+                    overridePendingTransition(R.anim.transition_zoom_in, R.anim.transition_zoom_out)
                 }
             }
             true
