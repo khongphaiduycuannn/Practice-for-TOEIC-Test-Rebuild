@@ -206,7 +206,7 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
                     LayoutParams.MATCH_PARENT
                 )
             } else {
-                val animator = ValueAnimator.ofInt(0, targetHeight)
+                val animator = ValueAnimator.ofInt(0, (1.5 * targetHeight).toInt())
                 animator.addUpdateListener { valueAnimator ->
                     val value = valueAnimator.animatedValue as Int
                     val layoutParams = view.layoutParams
@@ -225,6 +225,10 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
         binding.questionCard.txtTitle.text = "Question ${index + 1}"
         enableChoiceButton(true)
         fillBlankAnswer()
+        binding.questionCard.answer.txtAAnswer.text = ""
+        binding.questionCard.answer.txtBAnswer.text = ""
+        binding.questionCard.answer.txtCAnswer.text = ""
+        binding.questionCard.answer.txtDAnswer.text = ""
 
         val image = card.image
         val sound = card.sound
@@ -235,11 +239,11 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
 
         if (correct == choices[0])
             correct = "A"
-        if (correct == choices[1])
+        if (choices.size > 1 && correct == choices[1])
             correct = "B"
-        if (correct == choices[2])
+        if (choices.size > 2 && correct == choices[2])
             correct = "C"
-        if (correct == choices[3])
+        if (choices.size > 3 && correct == choices[3])
             correct = "D"
 
         binding.questionCard.result.txtTitleExplanation.visibility = View.GONE
@@ -376,11 +380,11 @@ class TestFragment() : BaseFragment<FragmentTestBinding>(FragmentTestBinding::in
 
         if (correct == choices[0])
             correct = "A"
-        if (correct == choices[1])
+        if (choices.size > 1 && correct == choices[1])
             correct = "B"
-        if (correct == choices[2])
+        if (choices.size > 2 && correct == choices[2])
             correct = "C"
-        if (correct == choices[3])
+        if (choices.size > 3 && correct == choices[3])
             correct = "D"
 
         when (choice) {

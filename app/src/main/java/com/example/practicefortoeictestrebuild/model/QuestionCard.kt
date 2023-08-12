@@ -6,9 +6,9 @@ data class QuestionCard(
     @SerializedName("_id")
     val id: String,
     @SerializedName("image")
-    val image: String,
+    val image: String?,
     @SerializedName("sound")
-    val sound: String,
+    val sound: String?,
     @SerializedName("texts")
     val content: String,
     @SerializedName("correct")

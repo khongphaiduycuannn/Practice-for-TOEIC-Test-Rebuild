@@ -89,7 +89,7 @@ public class RealPathUtil {
                 if ("primary".equalsIgnoreCase(type)) {
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
-                
+
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {

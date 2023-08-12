@@ -185,4 +185,8 @@ class TestViewModel : BaseViewModel() {
             it.userChoice = 0
         }
     }
+
+    fun deleteQuestion() {
+        _questions.value = mutableListOf()
+    }
 }

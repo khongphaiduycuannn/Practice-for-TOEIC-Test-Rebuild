@@ -8,10 +8,12 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -64,7 +66,8 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
 
     override fun initData() {
         initDialog()
-        testViewModel?.getDataWithOutProgress()
+        if (realTestResultViewModel?.status == "do-test")
+            testViewModel?.getDataWithOutProgress()
         testResultViewModel?.startTime = LocalDateTime.now()
     }
 
@@ -138,8 +141,17 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
         }
 
         binding.toolbar.setNavigationOnClickListener {
+            testViewModel?.deleteQuestion()
             findNavController().popBackStack()
         }
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                testViewModel?.deleteQuestion()
+                findNavController().popBackStack()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         dialogBinding.btnRetry.setOnClickListener {
             internetDialog.dismiss()
@@ -167,6 +179,11 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
         testViewModel?.topicName?.observe(viewLifecycleOwner) {
             binding.toolbar.title = it
         }
+    }
+
+    override fun onDestroy() {
+        destroyCurrentCard()
+        super.onDestroy()
     }
 
     private fun initDialog() {
@@ -246,7 +263,7 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
                     LinearLayout.LayoutParams.MATCH_PARENT
                 )
             } else {
-                val animator = ValueAnimator.ofInt(0, targetHeight)
+                val animator = ValueAnimator.ofInt(0, (1.5 * targetHeight).toInt())
                 animator.addUpdateListener { valueAnimator ->
                     val value = valueAnimator.animatedValue as Int
                     val layoutParams = view.layoutParams
@@ -264,6 +281,10 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
         binding.questionCard.btnPlay.isEnabled = false
         enableChoiceButton(true)
         fillBlankAnswer()
+        binding.questionCard.answer.txtAAnswer.text = ""
+        binding.questionCard.answer.txtBAnswer.text = ""
+        binding.questionCard.answer.txtCAnswer.text = ""
+        binding.questionCard.answer.txtDAnswer.text = ""
 
         val image = card.image
         val sound = card.sound
@@ -274,11 +295,11 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
 
         if (correct == choices[0])
             correct = "A"
-        if (correct == choices[1])
+        if (choices.size > 1 && correct == choices[1])
             correct = "B"
-        if (correct == choices[2])
+        if (choices.size > 2 && correct == choices[2])
             correct = "C"
-        if (correct == choices[3])
+        if (choices.size > 3 && correct == choices[3])
             correct = "D"
 
         binding.questionCard.result.txtTitleExplanation.visibility = View.GONE
@@ -336,7 +357,11 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
             setDataSource(link)
             binding.questionCard.lnLoading.alpha = 1.0F
             CoroutineScope(Dispatchers.Default).launch {
-                prepare()
+                try {
+                    prepare()
+                } catch (e: Exception) {
+                    Log.e("Error", e.toString())
+                }
             }
         }.setOnPreparedListener {
             binding.questionCard.btnPlay.isEnabled = true
@@ -366,8 +391,9 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
 
     private fun fillResult(flag: Boolean, correct: String) {
         val result = binding.questionCard.result
+        val card = testViewModel?.questions?.value!![index].correct
 
-        result.txtAnswer.text = "Answer: $correct"
+        result.txtAnswer.text = "Answer: $card"
         if (flag) {
             result.imgImage.setImageResource(R.drawable.img_hehe)
             result.txtResult.text = "Correct"
@@ -413,11 +439,11 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
 
         if (correct == choices[0])
             correct = "A"
-        if (correct == choices[1])
+        if (choices.size > 1 && correct == choices[1])
             correct = "B"
-        if (correct == choices[2])
+        if (choices.size > 2 && correct == choices[2])
             correct = "C"
-        if (correct == choices[3])
+        if (choices.size > 3 && correct == choices[3])
             correct = "D"
 
         when (choice) {
@@ -487,6 +513,7 @@ class RealTestFragment : BaseFragment<FragmentRealTestBinding>(FragmentRealTestB
                 "D" -> binding.questionCard.answer.dAnswer.setBackgroundResource(R.drawable.ic_choice_correct)
             }
         }
+
         fillResult(correct == choice, correct)
     }
 }

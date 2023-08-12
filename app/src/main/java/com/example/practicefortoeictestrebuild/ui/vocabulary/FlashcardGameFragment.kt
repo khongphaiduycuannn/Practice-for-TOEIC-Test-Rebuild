@@ -231,11 +231,11 @@ class FlashcardGameFragment :
 
         if (correct == choices[0])
             correct = "A"
-        if (correct == choices[1])
+        if (choices.size > 1 && correct == choices[1])
             correct = "B"
-        if (correct == choices[2])
+        if (choices.size > 2 && correct == choices[2])
             correct = "C"
-        if (correct == choices[3])
+        if (choices.size > 3 && correct == choices[3])
             correct = "D"
 
         binding.questionCard.result.txtTitleExplanation.visibility = View.GONE
@@ -375,11 +375,11 @@ class FlashcardGameFragment :
 
         if (correct == choices[0])
             correct = "A"
-        if (correct == choices[1])
+        if (choices.size > 1 && correct == choices[1])
             correct = "B"
-        if (correct == choices[2])
+        if (choices.size > 2 && correct == choices[2])
             correct = "C"
-        if (correct == choices[3])
+        if (choices.size > 3 && correct == choices[3])
             correct = "D"
 
         when (userChoice) {
