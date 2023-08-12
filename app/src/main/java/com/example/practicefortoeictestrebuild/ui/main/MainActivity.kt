@@ -9,6 +9,7 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -97,6 +98,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.getUserWithOutDialog()
+    }
+
     private fun logout() {
         MyApplication.clearToken()
         startActivity(Intent(this, LoginActivity::class.java))
@@ -109,6 +115,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         Glide.with(headerBinding.imgAvatar.context).load(user.avatar).into(headerBinding.imgAvatar)
         headerBinding.txtName.text = user.name
         headerBinding.txtEmail.text = user.email
+        if (binding.drawerView.headerCount != 0)
+            binding.drawerView.removeHeaderView(binding.drawerView.getHeaderView(0))
         binding.drawerView.addHeaderView(headerBinding.root)
     }
 
@@ -173,10 +181,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                         MyApplication.setScheduleNotifyStatus(2)
                         alarmScheduler.cancel(AlarmItem(getString(R.string.app_name)))
                         btnSwitch?.isChecked = false
+                        Toast.makeText(this, "Don't forget to study every day!", Toast.LENGTH_LONG)
+                            .show()
                     } else if (MyApplication.getScheduleNotifyStatus() == 2) {
                         MyApplication.setScheduleNotifyStatus(1)
                         alarmScheduler.schedule(AlarmItem(getString(R.string.app_name)))
                         btnSwitch?.isChecked = true
+                        Toast.makeText(
+                            this,
+                            "I will notify you at 8 p.m tonight!",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
                 R.id.nav_profile -> {

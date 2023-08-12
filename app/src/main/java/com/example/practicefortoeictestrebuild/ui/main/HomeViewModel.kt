@@ -10,11 +10,9 @@ import com.example.practicefortoeictestrebuild.api.ApiService
 import com.example.practicefortoeictestrebuild.base.BaseViewModel
 import com.example.practicefortoeictestrebuild.base.DataResult
 import com.example.practicefortoeictestrebuild.model.User
-import com.example.practicefortoeictestrebuild.utils.startInternetError
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.lang.Exception
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -45,6 +43,25 @@ class HomeViewModel : BaseViewModel() {
                     }
                 })
         }
+    }
+
+    fun getUserWithOutDialog() {
+        val apiService = ApiHelper.getInstance().create(ApiService::class.java)
+        apiService.getUser(MyApplication.getToken())
+            .enqueue(object : Callback<ApiResponse<User>> {
+                override fun onResponse(
+                    call: Call<ApiResponse<User>>,
+                    response: Response<ApiResponse<User>>
+                ) {
+                    if (response.isSuccessful && response.body()?.data != null) {
+                        _user.value = response.body()?.data!!
+                    }
+                }
+
+                override fun onFailure(call: Call<ApiResponse<User>>, t: Throwable) {
+
+                }
+            })
     }
 
     fun getData(dialog: Dialog) {

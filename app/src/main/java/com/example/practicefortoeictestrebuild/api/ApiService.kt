@@ -1,6 +1,8 @@
 package com.example.practicefortoeictestrebuild.api
 
 import com.example.practicefortoeictestrebuild.model.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -115,5 +117,21 @@ interface ApiService {
         @Query("month") month: Int,
         @Query("day") day: Int,
         @Query("cardId") cardId: String
+    ): Call<ApiResponse<Any>>
+
+    @Multipart
+    @PUT("/api/v1/auth/profile")
+    fun updateAvatar(
+        @Header("Authorization") authorization: String?,
+        @Part avatar: MultipartBody.Part,
+        @Part("email") email: RequestBody
+    ): Call<ApiResponse<Any>>
+
+    @Multipart
+    @PUT("/api/v1/auth/profile")
+    fun updateUsername(
+        @Header("Authorization") authorization: String?,
+        @Part("name") name: RequestBody,
+        @Part("email") email: RequestBody
     ): Call<ApiResponse<Any>>
 }

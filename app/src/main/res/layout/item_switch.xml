@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
+    android:enabled="false"
     android:layout_gravity="center"
     android:thumb="@drawable/ic_switch_thumb"
     app:track="@drawable/bg_track" />
